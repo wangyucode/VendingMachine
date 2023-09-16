@@ -27,6 +27,12 @@ function App() {
     sendMsg(msg).then(result =>  p.current.innerText += `received-->${result}\n`);
   }
 
+  function send1() {
+    const msg = JSON.stringify({ body: "01 05 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 70 48", type: 2 });
+    p.current.innerText += `send-->${msg}\n`;
+    sendMsg(msg).then(result =>  p.current.innerText += `received-->${result}\n`);
+  }
+
   function clear() {
     p.current.innerText = "";
   }
@@ -66,7 +72,9 @@ function App() {
             <Radio value="0">无反馈电磁铁</Radio>
             <Radio value="3">三线制电机</Radio>
           </Radio.Group>
-
+          <Button type="primary" onClick={send1}>
+            发送1号
+          </Button>
           <Button type="primary" onClick={send}>
             发送
           </Button>

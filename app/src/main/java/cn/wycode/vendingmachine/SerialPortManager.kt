@@ -2,7 +2,6 @@ package cn.wycode.vendingmachine
 
 import android.serialport.SerialPort
 import java.io.File
-import kotlin.experimental.and
 
 
 class SerialPortManager {
