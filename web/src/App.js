@@ -18,21 +18,20 @@ function App() {
   const [pipeType, setPipeType] = useState("3");
   const p = useRef(null);
 
-  async function send() {
+  function send() {
     const index = Math.abs(pipeIndex).toString(16).padStart(2, "0");
     const data = `${index} 05 00 0${pipeType} 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
     const crc = crc16(data);
     const msg = JSON.stringify({ body: `${data} ${crc}`, type: 2 });
     p.current.innerText += `send-->${msg}\n`;
-    const result = await sendMsg(msg);
-    p.current.innerText += `received-->${result}\n`;
+    sendMsg(msg).then(result =>  p.current.innerText += `received-->${result}\n`);
   }
 
   function clear() {
     p.current.innerText = "";
   }
 
-  async function upgrade() {
+  function upgrade() {
     Dialog.alert({
       content: <Loading type="circular" />,
       hideConfirmButton: true,
@@ -43,10 +42,7 @@ function App() {
 
     const msg = JSON.stringify({ type: 3 });
     p.current.innerText += `send-->${msg}\n`;
-    setTimeout(async () => {
-      const result = sendMsg(msg);
-      p.current.innerText += `received-->${result}\n`;
-    }, 0);
+    sendMsg(msg).then(result =>  p.current.innerText += `received-->${result}\n`);
   }
 
   return (
