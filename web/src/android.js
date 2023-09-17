@@ -1,7 +1,9 @@
-export async function sendMsg(msg) {
-  try {
-    return await window.Android.fromJs(msg);
-  } catch {
-    return "not in shell\n";
-  }
+export function sendMsg(msg, callback) {
+  setTimeout(async () => {
+    try {
+      callback(await window.Android.fromJs(msg));
+    } catch {
+      callback("not in shell");
+    }
+  }, 0);
 }

@@ -1,23 +1,16 @@
-.App{
-    height: 100%;
-    position: relative;
+.App {
+  height: 100%;
+  position: relative;
 }
 
-.content{
-    position: absolute;
-    /* display: flex;
-    flex-direction: column; */
-    top: 44px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 20px 20px;
-    background-color: #fafafa;
+#version {
+  position: fixed;
+  right: 20px;
+  bottom: 10px;
+  font-size: small;
 }
 
-#version{
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    font-size: small;
+#log {
+  font-size: small;
+  width: 100%;
 }

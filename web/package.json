@@ -1,6 +1,6 @@
 {
   "name": "vending",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "private": true,
   "dependencies": {
     "@nutui/nutui-react": "^2.0.17",
@@ -29,5 +29,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
   }
 }

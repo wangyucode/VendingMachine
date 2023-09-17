@@ -55,11 +55,10 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun loadWebPage(htmlPath: String) {
-        webView = findViewById<WebView>(R.id.web_view)
+        webView = findViewById(R.id.web_view)
         webView.webViewClient = WebViewClient()
         webView.settings.javaScriptEnabled = true
         webView.settings.allowFileAccess = true
-        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
         webView.addJavascriptInterface(MessageHandler(webView), "Android")
 
         webView.loadUrl(htmlPath)
@@ -95,6 +94,7 @@ class MainActivity : AppCompatActivity() {
                 if (entry.isDirectory) {
                     file.mkdir()
                 } else {
+                    file.parentFile?.mkdirs()
                     zipInputStream.copyTo(file.outputStream())
                 }
                 entry = zipInputStream.nextEntry

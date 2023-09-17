@@ -20,15 +20,16 @@ class SerialPortManager {
     fun send(msg: String): String {
         val bytes = hexToBytes(msg)
         if (bytes.size != 20) return "invalid length"
-        var readed = 0
+        val read: Int
         try {
             serialPort.outputStream.write(bytes)
             Thread.sleep(100)
-            readed = serialPort.inputStream.read(bytes)
+            read = serialPort.inputStream.read(bytes)
         } catch (e: Exception) {
-            return "serial port error->${e.message}"
+            return "serial port error - ${e.message}"
         }
-        return "readed -> $readed: ${bytes.toString()}"
+
+        return "read - $read: ${bytes.contentToString()}, ${bytesToHex(bytes)}"
     }
 
 
