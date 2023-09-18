@@ -43,16 +43,7 @@ class SerialPortManager {
         return result
     }
 
-    private fun bytesToHex(msg: ByteArray): String {
-        val sb = StringBuffer()
-        for (byte in msg) {
-            val hex = Integer.toHexString(byte.toInt());
-            if (hex.length < 2) {
-                sb.append(0)
-            }
-            sb.append(hex)
-            sb.append(" ")
-        }
-        return sb.toString()
+    fun bytesToHex(msg: ByteArray): String {
+        return msg.joinToString(" ") { "%02x".format(it) }
     }
 }

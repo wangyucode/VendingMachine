@@ -18,7 +18,7 @@ export default function Settings() {
   const p = useRef(null);
 
   function send() {
-    const index = Math.abs(pipeIndex).toString(16).padStart(2, "0");
+    const index = Number.parseInt(pipeIndex).toString(16).padStart(2, "0");
     const data = `${index} 05 00 0${pipeType} 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
     const crc = crc16(data);
     const msg = JSON.stringify({ body: `${data} ${crc}`, type: 2 });

@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    api("com.tencent.tbs:tbssdk:44286")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

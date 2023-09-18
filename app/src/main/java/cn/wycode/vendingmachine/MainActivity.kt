@@ -104,10 +104,10 @@ class MainActivity : AppCompatActivity() {
 
     fun upgrade() {
         runBlocking {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 downloadWebPackage()
             }
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 webView.reload()
             }
         }

@@ -12,6 +12,8 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        val bytes = ByteArray(1)
+        bytes[0]=-75
+        assertEquals(SerialPortManager().bytesToHex(bytes), "b5")
     }
 }
