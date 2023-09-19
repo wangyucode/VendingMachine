@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         webView.webViewClient = WebViewClient()
         webView.settings.javaScriptEnabled = true
         webView.settings.allowFileAccess = true
+        WebView.setWebContentsDebuggingEnabled(true)
         webView.addJavascriptInterface(MessageHandler(webView), "Android")
 
         webView.loadUrl(htmlPath)

@@ -23,24 +23,19 @@ function App() {
 
   const products = [
     {
-      mainImg:
-        "//img10.360buyimg.com/ling/jfs/t1/181258/24/10385/53029/60d04978Ef21f2d42/92baeb21f907cd24.jpg",
+      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
     },
     {
-      mainImg:
-        "//img10.360buyimg.com/ling/jfs/t1/181258/24/10385/53029/60d04978Ef21f2d42/92baeb21f907cd24.jpg",
+      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
     },
     {
-      mainImg:
-        "//img10.360buyimg.com/ling/jfs/t1/181258/24/10385/53029/60d04978Ef21f2d42/92baeb21f907cd24.jpg",
+      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
     },
     {
-      mainImg:
-        "//img10.360buyimg.com/ling/jfs/t1/181258/24/10385/53029/60d04978Ef21f2d42/92baeb21f907cd24.jpg",
+      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
     },
     {
-      mainImg:
-        "//img10.360buyimg.com/ling/jfs/t1/181258/24/10385/53029/60d04978Ef21f2d42/92baeb21f907cd24.jpg",
+      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
     },
   ];
 
@@ -76,25 +71,25 @@ function App() {
         onClick={onClickAbout}
         leftIcon={navigator.onLine ? <SignalIcon /> : <SignalSlashIcon />}
       ></NoticeBar>
-      <Row gutter="10" className="tw-p-4">
+      <Row gutter="16" className="tw-p-4">
         <Col span="16">
-          <Swiper height={240} autoPlay={3000} indicator loop>
-            <Swiper.Item>
-              <img
+          <Swiper height={360} autoPlay={3000} indicator loop className="tw-rounded-lg tw-shadow">
+            <Swiper.Item >
+              <Image
                 src="https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg"
-                alt=""
+                fit="cover"
               />
             </Swiper.Item>
             <Swiper.Item>
-              <img
-                src="https://storage.360buyimg.com/jdc-article/NutUItaro2.jpg"
-                alt=""
+              <Image
+                src="https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg"
+                fit="cover"
               />
             </Swiper.Item>
           </Swiper>
         </Col>
         <Col span="8" gutter="10">
-          <div className="tw-flex tw-flex-col tw-gap-y-4">
+          <div className="tw-flex tw-flex-col">
             <Button className="main-btn choose" type="info">
               选择编号
             </Button>
@@ -104,15 +99,14 @@ function App() {
           </div>
         </Col>
       </Row>
-      <div className="tw-px-1.5">
-        <Grid columns={4} gap="8">
+        <Grid columns={4} gap="14">
           {products.map((product) => (
             <Grid.Item>
               <div>
                 <Image
                   src={product.mainImg}
-                  width="160"
-                  height="160"
+                  width="250"
+                  height="250"
                   fit="cover"
                 />
 
@@ -125,7 +119,6 @@ function App() {
             </Grid.Item>
           ))}
         </Grid>
-      </div>
 
       <Popup
         visible={showAbout}
