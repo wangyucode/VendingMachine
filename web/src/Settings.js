@@ -19,7 +19,7 @@ export default function Settings() {
 
   function send() {
     const index = Number.parseInt(pipeIndex).toString(16).padStart(2, "0");
-    const data = `${index} 05 00 0${pipeType} 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
+    const data = `01 05 ${index} 0${pipeType} 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
     const crc = crc16(data);
     const msg = JSON.stringify({ body: `${data} ${crc}`, type: 2 });
     p.current.innerText += `send-->${msg}\n`;
