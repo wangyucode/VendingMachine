@@ -50,7 +50,7 @@ export default function Settings() {
   }
 
   return (
-    <div className="px-2">
+    <div className="tw-px-2">
       <Space wrap>
         <InputNumber
           value={pipeIndex}
@@ -78,10 +78,10 @@ export default function Settings() {
           升级
         </Button>
       </Space>
-      <p id="log" ref={p} className="max-h-96 overflow-y-scroll">
+      <p id="log" ref={p} className="tw-max-h-96 tw-overflow-y-scroll tw-text-sm">
           {window.logs}
         </p>
-      <div id="version">{packageJson.version}</div>
+      <div className="tw-text-sm tw-fixed tw-right-4 tw-bottom-4">{packageJson.version}</div>
     </div>
   );
 }

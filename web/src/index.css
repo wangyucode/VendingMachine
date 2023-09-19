@@ -6,3 +6,8 @@ html, body , #root{
     height: 100%;
     margin: 0;
 }
+
+:root {
+    --nutui-grid-item-content-padding: 0;
+    --nutui-tag-font-size: 16px;
+}
