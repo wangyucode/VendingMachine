@@ -5,6 +5,7 @@ import {
   Button,
   Loading,
   Dialog,
+  Divider,
 } from "@nutui/nutui-react";
 import { useState, useRef } from "react";
 
@@ -28,6 +29,14 @@ export default function Settings() {
     sendMsg(msg, (result) => (p.current.innerText += `\nreceived-->${result}`));
   }
 
+  function open() {
+    const data = '01 05 79 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00';
+    const crc = crc16(data);
+    const msg = JSON.stringify({ body: `${data} ${crc}`, type: 2 });
+    p.current.innerText += `\nsend-->${msg}`;
+    sendMsg(msg, (result) => (p.current.innerText += `\nreceived-->${result}`));
+  }
+
   function upgrade() {
     Dialog.alert({
       content: <Loading type="circular" />,
@@ -43,8 +52,10 @@ export default function Settings() {
   }
 
   return (
-    <div className="tw-px-2">
-      <Space wrap>
+    <div className="tw-w-full tw-h-full tw-p-4 tw-text-2xl tw-text-slate-700">
+      <h1 className="tw-text-center">系统设置</h1>
+      <Divider />
+      <Space>
         <InputNumber
           value={pipeIndex}
           min="1"
@@ -61,17 +72,22 @@ export default function Settings() {
           <Radio value="0">无反馈电磁铁</Radio>
           <Radio value="3">三线制电机</Radio>
         </Radio.Group>
-        <Button type="primary" onClick={send}>
+        <Button type="primary" onClick={send} className="tw-w-56">
           发送
         </Button>
-        <Button type="info" onClick={upgrade}>
-          升级
-        </Button>
       </Space>
+      <div className="tw-h-2"/>
+      <Button type="success" onClick={open} className="tw-w-full">
+        开门
+      </Button>
+      <div className="tw-h-2"/>
+      <Button type="info" onClick={upgrade} className="tw-w-full">
+        升级
+      </Button>
       <p
         id="log"
         ref={p}
-        className="tw-max-h-96 tw-overflow-y-scroll tw-text-sm"
+        className="tw-h-3/4 tw-overflow-y-scroll tw-text-sm tw-bg-slate-200 tw-mt-4"
       >
         {window.logs}
       </p>

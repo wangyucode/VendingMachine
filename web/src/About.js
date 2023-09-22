@@ -17,7 +17,7 @@ export default function About({ setDialogContent }) {
       lastClickTime = now;
       console.log(clickCount);
       if (clickCount > 5) {
-        setDialogContent("系统设置");
+        setDialogContent("管理员登录");
       }
     }
   }
@@ -40,7 +40,7 @@ export default function About({ setDialogContent }) {
         className="tw-absolute tw-text-lg tw-text-slate-500 tw-right-4 tw-bottom-4"
         onClick={onclickPhone}
       >
-        微信无响应时请打电话：17792093491
+        微信无响应时请打电话: 17792093491
       </p>
     </div>
   );

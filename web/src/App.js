@@ -15,6 +15,7 @@ import { SignalSlashIcon, SignalIcon } from "@heroicons/react/24/solid";
 
 import About from "./About";
 import Settings from "./Settings";
+import Login from "./Login";
 import "./App.css";
 
 function App() {
@@ -43,15 +44,17 @@ function App() {
   ];
 
   function onClickAbout() {
-    setDialogContent('联系客服');
+    setDialogContent("联系客服");
   }
 
   function getDialogContent() {
     switch (dialogContent) {
       case "联系客服":
-        return <About setDialogContent={setDialogContent}/>;
+        return <About setDialogContent={setDialogContent} />;
       case "系统设置":
         return <Settings />;
+      case "管理员登录":
+        return <Login setDialogContent={setDialogContent} />;
     }
   }
 

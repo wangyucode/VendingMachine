@@ -10,4 +10,6 @@ html, body , #root{
 :root {
     --nutui-grid-item-content-padding: 0;
     --nutui-tag-font-size: 16px;
+    --nutui-input-border-bottom-width: 1px;
+    --nutui-input-font-size: 16px;
 }
