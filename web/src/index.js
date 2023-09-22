@@ -4,7 +4,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import "@nutui/nutui-react/dist/style.css";
-import cssVars from "css-vars-ponyfill";
 import { sendMsg } from "./android";
 
 
@@ -28,9 +27,6 @@ setTimeout(() => {
     window.logs += `received --->  ${msg}\n`;
     return "js ok";
   };
-  cssVars({
-    // Options...
-  });
 }, 1000);
 
 

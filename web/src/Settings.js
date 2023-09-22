@@ -18,21 +18,14 @@ export default function Settings() {
   const p = useRef(null);
 
   function send() {
-    const index = Number.parseInt(pipeIndex).toString(16).padStart(2, "0");
+    const index = Number.parseInt(pipeIndex - 1)
+      .toString(16)
+      .padStart(2, "0");
     const data = `01 05 ${index} 0${pipeType} 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
     const crc = crc16(data);
     const msg = JSON.stringify({ body: `${data} ${crc}`, type: 2 });
-    p.current.innerText += `send-->${msg}\n`;
-    sendMsg(msg, (result) => (p.current.innerText += `received-->${result}\n`));
-  }
-
-  function send1() {
-    const msg = JSON.stringify({
-      body: "01 05 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 70 48",
-      type: 2,
-    });
-    p.current.innerText += `send-->${msg}\n`;
-    sendMsg(msg, (result) => (p.current.innerText += `received-->${result}\n`));
+    p.current.innerText += `\nsend-->${msg}`;
+    sendMsg(msg, (result) => (p.current.innerText += `\nreceived-->${result}`));
   }
 
   function upgrade() {
@@ -45,8 +38,8 @@ export default function Settings() {
     });
 
     const msg = JSON.stringify({ type: 3 });
-    p.current.innerText += `send-->${msg}\n`;
-    sendMsg(msg, (result) => (p.current.innerText += `received-->${result}\n`));
+    p.current.innerText += `\nsend-->${msg}`;
+    sendMsg(msg, (result) => (p.current.innerText += `\nreceived-->${result}`));
   }
 
   return (
@@ -68,9 +61,6 @@ export default function Settings() {
           <Radio value="0">无反馈电磁铁</Radio>
           <Radio value="3">三线制电机</Radio>
         </Radio.Group>
-        <Button type="primary" onClick={send1}>
-          发送1号
-        </Button>
         <Button type="primary" onClick={send}>
           发送
         </Button>
@@ -78,10 +68,16 @@ export default function Settings() {
           升级
         </Button>
       </Space>
-      <p id="log" ref={p} className="tw-max-h-96 tw-overflow-y-scroll tw-text-sm">
-          {window.logs}
-        </p>
-      <div className="tw-text-sm tw-fixed tw-right-4 tw-bottom-4">{packageJson.version}</div>
+      <p
+        id="log"
+        ref={p}
+        className="tw-max-h-96 tw-overflow-y-scroll tw-text-sm"
+      >
+        {window.logs}
+      </p>
+      <div className="tw-text-sm tw-fixed tw-right-4 tw-bottom-4">
+        {packageJson.version}
+      </div>
     </div>
   );
 }

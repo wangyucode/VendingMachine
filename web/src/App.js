@@ -18,8 +18,11 @@ import Settings from "./Settings";
 import "./App.css";
 
 function App() {
-  const [showAbout, setShowAbout] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [online, setOnline] = useState(true);
+  const [dialogContent, setDialogContent] = useState(null);
+
+  window.addEventListener("online", () => setOnline(true));
+  window.addEventListener("offline", () => setOnline(false));
 
   const products = [
     {
@@ -40,27 +43,16 @@ function App() {
   ];
 
   function onClickAbout() {
-    // if (lastClickLogin === 0) {
-    //   lastClickLogin = new Date().getTime();
-    //   return;
-    // }
+    setDialogContent('联系客服');
+  }
 
-    // if (loginClickCount > 5) {
-    //   loginClickCount = 0;
-    //   lastClickLogin = 0;
-    //   setShowSettings(true);
-    //   return;
-    // }
-
-    // if (new Date().getTime() - lastClickLogin < 1000) {
-    //   loginClickCount++;
-    //   return;
-    // }
-
-    // // todo show service
-    // loginClickCount = 0;
-    // lastClickLogin = 0;
-    setShowSettings(true);
+  function getDialogContent() {
+    switch (dialogContent) {
+      case "联系客服":
+        return <About setDialogContent={setDialogContent}/>;
+      case "系统设置":
+        return <Settings />;
+    }
   }
 
   return (
@@ -69,12 +61,18 @@ function App() {
         content="联系客服点我，柜子左边有购物袋，持续上新促销中！"
         scrollable
         onClick={onClickAbout}
-        leftIcon={navigator.onLine ? <SignalIcon /> : <SignalSlashIcon />}
+        leftIcon={online ? <SignalIcon /> : <SignalSlashIcon />}
       ></NoticeBar>
       <Row gutter="16" className="tw-p-4">
         <Col span="16">
-          <Swiper height={360} autoPlay={3000} indicator loop className="tw-rounded-lg tw-shadow">
-            <Swiper.Item >
+          <Swiper
+            height={360}
+            autoPlay={3000}
+            indicator
+            loop
+            className="tw-rounded-lg tw-shadow"
+          >
+            <Swiper.Item>
               <Image
                 src="https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg"
                 fit="cover"
@@ -99,47 +97,36 @@ function App() {
           </div>
         </Col>
       </Row>
-        <Grid columns={4} gap="14">
-          {products.map((product) => (
-            <Grid.Item>
-              <div>
-                <Image
-                  src={product.mainImg}
-                  width="250"
-                  height="250"
-                  fit="cover"
-                />
+      <Grid columns={4} gap="14">
+        {products.map((product, index) => (
+          <Grid.Item key={index}>
+            <div>
+              <Image
+                src={product.mainImg}
+                width="250"
+                height="250"
+                fit="cover"
+              />
 
-                <p className="tw-text-xl tw-mt-2 tw-mx-2">我是商品名</p>
-                <div className="tw-flex tw-items-center tw-gap-2  tw-m-2">
-                  <Tag type="success tw-mr-1 tw-text-lg">12</Tag>
-                  <Price price={128.01} />
-                </div>
+              <p className="tw-text-xl tw-mt-2 tw-mx-2">我是商品名</p>
+              <div className="tw-flex tw-items-center tw-gap-2  tw-m-2">
+                <Tag type="success tw-mr-1 tw-text-lg">12</Tag>
+                <Price price={128.01} />
               </div>
-            </Grid.Item>
-          ))}
-        </Grid>
+            </div>
+          </Grid.Item>
+        ))}
+      </Grid>
 
       <Popup
-        visible={showAbout}
-        style={{ height: "50%" }}
-        position="bottom"
-        title="联系客服"
+        visible={dialogContent}
+        style={{ height: "60%", width: "60%" }}
+        title={dialogContent}
         closeable
-        onClose={() => setShowAbout(false)}
+        round
+        onClose={() => setDialogContent(null)}
       >
-        <About></About>
-      </Popup>
-
-      <Popup
-        visible={showSettings}
-        style={{ height: "50%" }}
-        position="bottom"
-        title="系统设置"
-        closeable
-        onClose={() => setShowSettings(false)}
-      >
-        <Settings></Settings>
+        {getDialogContent()}
       </Popup>
     </div>
   );

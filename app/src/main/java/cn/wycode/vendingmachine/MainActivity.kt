@@ -2,14 +2,10 @@ package cn.wycode.vendingmachine
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
