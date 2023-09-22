@@ -30,7 +30,7 @@ export default function Settings() {
   }
 
   function open() {
-    const data = '01 05 79 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00';
+    const data = '01 05 4f 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00';
     const crc = crc16(data);
     const msg = JSON.stringify({ body: `${data} ${crc}`, type: 2 });
     p.current.innerText += `\nsend-->${msg}`;
@@ -47,6 +47,12 @@ export default function Settings() {
     });
 
     const msg = JSON.stringify({ type: 3 });
+    p.current.innerText += `\nsend-->${msg}`;
+    sendMsg(msg, (result) => (p.current.innerText += `\nreceived-->${result}`));
+  }
+
+  function exit() {
+    const msg = JSON.stringify({ type: 4 });
     p.current.innerText += `\nsend-->${msg}`;
     sendMsg(msg, (result) => (p.current.innerText += `\nreceived-->${result}`));
   }
@@ -76,21 +82,24 @@ export default function Settings() {
           发送
         </Button>
       </Space>
-      <div className="tw-h-2"/>
-      <Button type="success" onClick={open} className="tw-w-full">
-        开门
-      </Button>
-      <div className="tw-h-2"/>
-      <Button type="info" onClick={upgrade} className="tw-w-full">
-        升级
-      </Button>
       <p
         id="log"
         ref={p}
-        className="tw-h-3/4 tw-overflow-y-scroll tw-text-sm tw-bg-slate-200 tw-mt-4"
+        className="tw-h-3/4 tw-overflow-y-scroll tw-text-sm tw-bg-slate-200 tw-my-4 tw-p-2"
       >
         {window.logs}
       </p>
+      <Button type="success" onClick={open} className="tw-w-full">
+        开门
+      </Button>
+      <div className="tw-h-4"/>
+      <Button type="info" onClick={upgrade} className="tw-w-full">
+        升级
+      </Button>
+      <div className="tw-h-4"/>
+      <Button onClick={exit} className="tw-w-full">
+        退出
+      </Button>
       <div className="tw-text-sm tw-fixed tw-right-4 tw-bottom-4">
         {packageJson.version}
       </div>

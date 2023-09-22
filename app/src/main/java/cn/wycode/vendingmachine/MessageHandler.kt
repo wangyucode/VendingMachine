@@ -35,6 +35,11 @@ class MessageHandler(
                 }
                 "ok"
             }
+            MSG_TYPE_EXIT -> {
+                val activity = webView.context as MainActivity
+                activity.finish()
+                "ok"
+            }
             else -> "ok"
         }
 
