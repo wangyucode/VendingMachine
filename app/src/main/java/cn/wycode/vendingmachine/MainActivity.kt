@@ -9,7 +9,6 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -25,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val scope = MainScope()
     private lateinit var webView: WebView
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,11 +32,13 @@ class MainActivity : AppCompatActivity() {
             val htmlPath = checkWebProject()
             loadWebPage(htmlPath)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        scope.cancel()
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+            Log.d(TAG, "onCreate: setOnSystemUiVisibilityChangeListener $visibility")
+            if (visibility == 0) {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            }
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -64,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         return "file://$htmlPath"
     }
 
-    private suspend fun downloadWebPackage() {
+    private fun downloadWebPackage() {
         val path = cacheDir.absolutePath
         val client = OkHttpClient()
         val request = Request.Builder().url("https://wycode.cn/upload/vending/build.zip").build()

@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Input, Divider, Button, NumberKeyboard } from "@nutui/nutui-react";
+import { Divider, Button, NumberKeyboard } from "@nutui/nutui-react";
 
 const secret = process.env.REACT_APP_PASSWORD;
 
 export default function Login({ setDialogContent }) {
   const [password, setPassword] = useState("");
   function login() {
-    console.log(password, secret);
     if (password === secret) {
       setDialogContent("系统设置");
     }

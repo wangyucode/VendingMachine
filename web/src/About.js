@@ -3,23 +3,18 @@ import { Divider } from "@nutui/nutui-react";
 import wechatUrl from "./wechat.jpg";
 
 export default function About({ setDialogContent }) {
-  let lastClickTime = 0;
   let clickCount = 0;
+  let clickTimeout = 0;
 
   function onclickPhone() {
-    let now = Date.now();
-    if (now - lastClickTime > 1000 && clickCount > 0) {
-      lastClickTime = 0;
+    clearTimeout(clickTimeout);
+    clickTimeout = setTimeout(() => {
       clickCount = 0;
-      return;
-    } else {
-      clickCount++;
-      lastClickTime = now;
-      if (clickCount > 5) {
-        setDialogContent("管理员登录");
-        lastClickTime = 0;
-        clickCount = 0;
-      }
+    }, 1000);
+    clickCount++;
+    console.log(clickCount);
+    if (clickCount > 5) {
+      setDialogContent("管理员登录");
     }
   }
 
@@ -27,7 +22,7 @@ export default function About({ setDialogContent }) {
     <div className="tw-flex tw-flex-col tw-items-center tw-w-full tw-h-full tw-p-4 tw-text-2xl">
       <h1 className="tw-text-center">联系客服</h1>
       <Divider />
-      <img src={wechatUrl} className="tw-w-1/2" />
+      <img src={wechatUrl} className="tw-w-1/2" alt="wechat"/>
       <p className="tw-mt-8 tw-text-left tw-w-3/4">同时提供：</p>
       <ul className="tw-text-left tw-w-3/5">
         <li>• 永久免费的售货机系统</li>

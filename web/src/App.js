@@ -55,6 +55,8 @@ function App() {
         return <Settings />;
       case "管理员登录":
         return <Login setDialogContent={setDialogContent} />;
+      default:
+        return null;
     }
   }
 
