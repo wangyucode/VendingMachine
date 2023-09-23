@@ -2,14 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body , #root{
-    height: 100%;
-    margin: 0;
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
 }
 
 :root {
-    --nutui-grid-item-content-padding: 0;
-    --nutui-tag-font-size: 16px;
-    --nutui-input-border-bottom-width: 1px;
-    --nutui-input-font-size: 16px;
+  --nutui-grid-item-content-padding: 0;
+  --nutui-tag-font-size: 16px;
+  --nutui-input-border-bottom-width: 1px;
+  --nutui-input-font-size: 16px;
+}
+
+.login .nut-overlay {
+  display: none;
 }

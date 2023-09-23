@@ -15,9 +15,10 @@ export default function About({ setDialogContent }) {
     } else {
       clickCount++;
       lastClickTime = now;
-      console.log(clickCount);
       if (clickCount > 5) {
         setDialogContent("管理员登录");
+        lastClickTime = 0;
+        clickCount = 0;
       }
     }
   }
