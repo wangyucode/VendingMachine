@@ -54,8 +54,8 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Row gutter="16" className="tw-px-4 tw-mt-4">
+    <div className="App tw-pt-4">
+      <Row gutter="16" className="tw-px-4">
         <Col span="18">
           <Swiper
             height={360}
