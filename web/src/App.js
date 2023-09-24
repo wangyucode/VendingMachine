@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  NoticeBar,
   Popup,
   Swiper,
   Col,
@@ -11,20 +10,14 @@ import {
   Price,
   Tag,
 } from "@nutui/nutui-react";
-import { SignalSlashIcon, SignalIcon } from "@heroicons/react/24/solid";
+import { Service, Jdl } from '@nutui/icons-react';
 
 import About from "./About";
 import Settings from "./Settings";
 import Login from "./Login";
-import "./App.css";
 
 function App() {
-  const [online, setOnline] = useState(true);
   const [dialogContent, setDialogContent] = useState(null);
-
-  window.addEventListener("online", () => setOnline(true));
-  window.addEventListener("offline", () => setOnline(false));
-
   const products = [
     {
       mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
@@ -61,15 +54,9 @@ function App() {
   }
 
   return (
-    <div className="App tw-bg-slate-50">
-      <NoticeBar
-        content="联系客服点我，柜子左边有购物袋，持续上新促销中！"
-        scrollable
-        onClick={onClickAbout}
-        leftIcon={online ? <SignalIcon /> : <SignalSlashIcon />}
-      ></NoticeBar>
-      <Row gutter="16" className="tw-p-4">
-        <Col span="16">
+    <div className="App">
+      <Row gutter="16" className="tw-px-4 tw-mt-4">
+        <Col span="18">
           <Swiper
             height={360}
             autoPlay={3000}
@@ -91,12 +78,12 @@ function App() {
             </Swiper.Item>
           </Swiper>
         </Col>
-        <Col span="8" gutter="10">
+        <Col span="6" gutter="10">
           <div className="tw-flex tw-flex-col">
-            <Button className="main-btn choose" type="info">
-              选择编号
+            <Button className="main-btn choose" type="info" onClick={onClickAbout} icon={<Service/>}>
+              联系客服
             </Button>
-            <Button className="main-btn code" type="success">
+            <Button className="main-btn code" type="success" icon={<Jdl/>}>
               取件码取货
             </Button>
           </div>
@@ -125,8 +112,9 @@ function App() {
 
       <Popup
         visible={dialogContent}
-        style={{ height: "60%", width: "60%" }}
+        style={{ height: "80%", width: "80%" }}
         title={dialogContent}
+        lockScroll={true}
         closeable
         round
         onClose={() => setDialogContent(null)}

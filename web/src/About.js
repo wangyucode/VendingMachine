@@ -23,11 +23,9 @@ export default function About({ setDialogContent }) {
       <h1 className="tw-text-center">联系客服</h1>
       <Divider />
       <img src={wechatUrl} className="tw-w-1/2" alt="wechat"/>
-      <p className="tw-mt-8 tw-text-left tw-w-3/4">同时提供：</p>
-      <ul className="tw-text-left tw-w-3/5">
-        <li>• 永久免费的售货机系统</li>
-        <li>• 售货机系统定制开发</li>
-        <li>• 售货机换系统过户</li>
+      <ul className="tw-text-left tw-w-4/5 tw-mt-4">
+        <li>• 无人售货加盟</li>
+        <li>• 永久免费的售货机系统，定制开发，过户</li>
         <li>• 各种APP开发</li>
         <li>• 网站开发</li>
         <li>• 小程序开发</li>

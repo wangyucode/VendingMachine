@@ -37,7 +37,7 @@ class MessageHandler(
             }
             MSG_TYPE_EXIT -> {
                 val activity = webView.context as MainActivity
-                activity.finish()
+                activity.moveTaskToBack(false)
                 "ok"
             }
             else -> "ok"

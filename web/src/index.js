@@ -21,10 +21,10 @@ setTimeout(() => {
     type: 1,
     body: JSON.stringify({ path, baudRate }),
   });
-  window.logs = `init-->${msg}\n`;
-  sendMsg(msg, result => window.logs += `received-->${result}\n`);
+  window.logs = `i:${msg}\n`;
+  sendMsg(msg, result => window.logs += `r:${result}\n`);
   window.fromAndroid = function (msg) {
-    window.logs += `received --->  ${msg}\n`;
+    window.logs += `r:${msg}\n`;
     return "js ok";
   };
 }, 1000);

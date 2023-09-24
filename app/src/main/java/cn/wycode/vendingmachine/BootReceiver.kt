@@ -8,8 +8,8 @@ class BootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action.equals(Intent.ACTION_BOOT_COMPLETED)) {
-            val toIntent = context.packageManager.getLaunchIntentForPackage(context.packageName);
-            context.startActivity(toIntent);
+            val toIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+            context.startActivity(toIntent)
         }
     }
 }

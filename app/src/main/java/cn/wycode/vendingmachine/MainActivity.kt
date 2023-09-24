@@ -32,13 +32,25 @@ class MainActivity : AppCompatActivity() {
             val htmlPath = checkWebProject()
             loadWebPage(htmlPath)
         }
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-            Log.d(TAG, "onCreate: setOnSystemUiVisibilityChangeListener $visibility")
-            if (visibility == 0) {
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            }
-        }
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        window.decorView.postDelayed({
+            startActivity(
+                this.packageManager.getLaunchIntentForPackage(
+                    this.packageName
+                )
+            )
+        }, 60000)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
