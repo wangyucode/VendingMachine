@@ -1,6 +1,6 @@
 {
   "name": "vending",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "private": true,
   "dependencies": {
     "@nutui/nutui-react": "^2.0.17",

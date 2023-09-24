@@ -1,6 +1,9 @@
 package cn.wycode.vendingmachine
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -23,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private val scope = MainScope()
     private lateinit var webView: WebView
+    private lateinit var alarmManager: AlarmManager
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             val htmlPath = checkWebProject()
             loadWebPage(htmlPath)
         }
+
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -39,18 +44,39 @@ class MainActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
+        window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            }
+        }
 
+        alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
+
+    override fun onStart() {
+        super.onStart()
+        val intent = this.packageManager.getLaunchIntentForPackage(this.packageName)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 100, intent,
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+        if (pendingIntent != null) alarmManager.cancel(pendingIntent)
+    }
+
 
     override fun onStop() {
         super.onStop()
-        window.decorView.postDelayed({
-            startActivity(
-                this.packageManager.getLaunchIntentForPackage(
-                    this.packageName
-                )
-            )
-        }, 60000)
+        val intent = this.packageManager.getLaunchIntentForPackage(this.packageName)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 100, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, 60000, pendingIntent)
     }
 
     @SuppressLint("SetJavaScriptEnabled")

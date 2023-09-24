@@ -10,7 +10,7 @@ import {
   Price,
   Tag,
 } from "@nutui/nutui-react";
-import { Service, Jdl } from '@nutui/icons-react';
+import { Service, Jdl } from "@nutui/icons-react";
 
 import About from "./About";
 import Settings from "./Settings";
@@ -45,7 +45,7 @@ function App() {
       case "联系客服":
         return <About setDialogContent={setDialogContent} />;
       case "系统设置":
-        return <Settings />;
+        return <Settings setDialogContent={setDialogContent} />;
       case "管理员登录":
         return <Login setDialogContent={setDialogContent} />;
       default:
@@ -80,10 +80,15 @@ function App() {
         </Col>
         <Col span="6" gutter="10">
           <div className="tw-flex tw-flex-col">
-            <Button className="main-btn choose" type="info" onClick={onClickAbout} icon={<Service/>}>
+            <Button
+              className="main-btn choose"
+              type="info"
+              onClick={onClickAbout}
+              icon={<Service />}
+            >
               联系客服
             </Button>
-            <Button className="main-btn code" type="success" icon={<Jdl/>}>
+            <Button className="main-btn code" type="success" icon={<Jdl />}>
               取件码取货
             </Button>
           </div>
@@ -112,7 +117,7 @@ function App() {
 
       <Popup
         visible={dialogContent}
-        style={{ height: "80%", width: "80%" }}
+        style={{ height: "60%", width: "60%" }}
         title={dialogContent}
         lockScroll={true}
         closeable

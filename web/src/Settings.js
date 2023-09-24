@@ -12,7 +12,7 @@ const packageJson = require("../package.json");
 
 let stopMultiple = false;
 
-export default function Settings() {
+export default function Settings({ setDialogContent }) {
   const [disabledSerial, setDisabledSerial] = useState(false);
   const [trackIndex, setTrackIndex] = useState(1);
   const [trackType, setTrackType] = useState("3");
@@ -84,7 +84,7 @@ export default function Settings() {
   }
 
   function upgrade() {
-    Dialog.alert({
+    const dialog = Dialog.alert({
       content: <Loading type="circular" />,
       hideConfirmButton: true,
       hideCancelButton: true,
@@ -96,13 +96,14 @@ export default function Settings() {
     p.current.innerText += `\ns:${msg}`;
     sendMsg(msg, (result) => (p.current.innerText += `\nr:${result}`));
 
-    setTimeout(window.location.reload, 60000);
+    setTimeout(dialog.close, 60000);
   }
 
   function exit() {
     const msg = JSON.stringify({ type: 4 });
     p.current.innerText += `\ns:${msg}`;
     sendMsg(msg, (result) => (p.current.innerText += `\nr:${result}`));
+    setDialogContent(null);
   }
 
   return (
@@ -122,8 +123,8 @@ export default function Settings() {
         <InputNumber
           className="tw-mx-4"
           value={trackType}
-          min="1"
-          max="120"
+          min="0"
+          max="6"
           onChange={setTrackType}
         />
         <Button type="success" onClick={send} disabled={disabledSerial}>
