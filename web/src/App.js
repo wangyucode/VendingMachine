@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Popup,
   Swiper,
@@ -18,23 +18,21 @@ import Login from "./Login";
 
 function App() {
   const [dialogContent, setDialogContent] = useState(null);
-  const products = [
-    {
-      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
-    },
-    {
-      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
-    },
-    {
-      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
-    },
-    {
-      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
-    },
-    {
-      mainImg: "https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg",
-    },
-  ];
+  const [banners, setBanners] = useState([]);
+  const [goods, setGoods] = useState([]);
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/vending/banner`, {
+      headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+    })
+      .then((res) => res.json())
+      .then((data) => setBanners(data.payload));
+
+    fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/vending/goods`, {
+      headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+    })
+      .then((res) => res.json())
+      .then((data) => setGoods(data.payload));
+  }, []);
 
   function onClickAbout() {
     setDialogContent("联系客服");
@@ -64,18 +62,11 @@ function App() {
             loop
             className="tw-rounded-lg tw-shadow"
           >
-            <Swiper.Item>
-              <Image
-                src="https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg"
-                fit="cover"
-              />
-            </Swiper.Item>
-            <Swiper.Item>
-              <Image
-                src="https://storage.360buyimg.com/jdc-article/NutUItaro34.jpg"
-                fit="cover"
-              />
-            </Swiper.Item>
+            {banners.map((banner) => (
+              <Swiper.Item key={banner._id}>
+                <Image src={banner.image} fit="cover" />
+              </Swiper.Item>
+            ))}
           </Swiper>
         </Col>
         <Col span="6" gutter="10">
@@ -95,20 +86,18 @@ function App() {
         </Col>
       </Row>
       <Grid columns={4} gap="14">
-        {products.map((product, index) => (
-          <Grid.Item key={index}>
+        {goods.map((g) => (
+          <Grid.Item key={g._id}>
             <div>
-              <Image
-                src={product.mainImg}
-                width="250"
-                height="250"
-                fit="cover"
-              />
+              <Image src={g.mainImg} width="250" height="250" fit="cover" />
 
-              <p className="tw-text-xl tw-mt-2 tw-mx-2">我是商品名</p>
+              <p className="tw-text-xl tw-mt-2 tw-mx-2">{g.name}</p>
               <div className="tw-flex tw-items-center tw-gap-2  tw-m-2">
-                <Tag type="success tw-mr-1 tw-text-lg">12</Tag>
-                <Price price={128.01} />
+                <div className="tw-bg-emerald-500 tw-mr-1 tw-text-2xl tw-px-2 tw-rounded tw-text-white tw-font-bold">{g.track}</div>
+                <Price price={g.price / 100}/>
+                {g.originalPrice && (
+                  <Price price={g.originalPrice / 100} className="tw-mt-2" line />
+                )}
               </div>
             </div>
           </Grid.Item>
