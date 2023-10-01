@@ -24,7 +24,7 @@ body,
 }
 
 .main-btn {
-  height:172px!important;
+  height: 172px !important;
   border-radius: 8px !important;
   font-size: 32px !important;
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -35,25 +35,67 @@ body,
   width: 36px !important;
 }
 
-.main-btn.code{
+.main-btn.code {
   margin-top: 16px;
 }
 
-.product-img{
+.product-img {
   padding-button: 50%;
   height: 0;
 }
 
-.nut-grid-item__content--center{
+.nut-grid-item__content--center {
   border-radius: 8px;
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
-.nut-img{
+.nut-img {
   border-top-left-radius: 8px;
-  border-top-right-radius:8px;
+  border-top-right-radius: 8px;
 }
 
 .login .nut-overlay {
   display: none;
+}
+
+.detail .nut-price {
+  line-height: 56px;
+}
+
+.detail .nut-price__symbol-large {
+  font-size: 36px;
+}
+
+.detail .nut-price__integer-large {
+  font-size: 56px;
+}
+
+.detail .nut-price__decimal-large {
+  font-size: 36px;
+}
+
+.detail .nut-price--line div {
+  font-size: 24px !important;
+}
+
+.detail .nut-inputnumber div,
+.detail .nut-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.nut-popup__close-icon .nut-icon-Close {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.nut-popup .nut-popup__close-icon {
+  top: 18px !important;
+  right: 18px !important;
+}
+
+.detail .nut-button {
+  font-size: 18px;
+  width: unset;
+  padding: 16px 32px;
 }
