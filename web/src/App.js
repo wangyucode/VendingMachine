@@ -8,21 +8,29 @@ import {
   Grid,
   Image,
   Price,
+  Badge,
+  Drag,
+  Notify
 } from "@nutui/nutui-react";
-import { Service, Jdl } from "@nutui/icons-react";
+import { Service, Jdl, Cart } from "@nutui/icons-react";
 
 import About from "./About";
 import Settings from "./Settings";
 import Login from "./Login";
 import Detail from "./Detail";
+import GoodsCart from "./GoodsCart";
+import Buy from "./Buy";
+import { getCartGoodsCount } from "./utils";
 
 let currentGoods = null;
+let iterationTimeoutId = 0;
 
 function App() {
   const [dialogContent, setDialogContent] = useState(null);
   const [banners, setBanners] = useState([]);
   const [goods, setGoods] = useState([]);
-  
+  const [cartGoods, setCartGoods] = useState([]);
+
   useEffect(() => {
     fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/vending/banner`, {
       headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
@@ -46,6 +54,10 @@ function App() {
     setDialogContent("商品详情");
   }
 
+  function openCart() {
+    setDialogContent("购物车");
+  }
+
   function getDialogContent() {
     switch (dialogContent) {
       case "联系客服":
@@ -55,14 +67,48 @@ function App() {
       case "管理员登录":
         return <Login setDialogContent={setDialogContent} />;
       case "商品详情":
-        return <Detail goods={currentGoods} />;
+        return (
+          <Detail
+            setDialogContent={setDialogContent}
+            goods={currentGoods}
+            setCartGoods={setCartGoods}
+            cartGoods={cartGoods}
+          />
+        );
+      case "购物车":
+        return (
+          <GoodsCart
+            setDialogContent={setDialogContent}
+            goods={currentGoods}
+            setCartGoods={setCartGoods}
+            cartGoods={cartGoods}
+          />
+        );
+
+      case "结算":
+        return (
+          <Buy
+            setDialogContent={setDialogContent}
+            goods={currentGoods}
+            setCartGoods={setCartGoods}
+            cartGoods={cartGoods}
+          />
+        );
       default:
         return null;
     }
   }
 
+  function onInteraction() {
+    clearTimeout(iterationTimeoutId);
+    iterationTimeoutId = setTimeout(function() {
+      Notify.text("无操作，10秒后返回主页", { duration: 10000 });
+    }, 3000);
+  }
+
+
   return (
-    <div className="App tw-pt-4">
+    <div className="app tw-pt-4" onTouchStart={onInteraction}>
       <Row gutter="16" className="tw-px-4">
         <Col span="18">
           <Swiper
@@ -119,6 +165,27 @@ function App() {
           </Grid.Item>
         ))}
       </Grid>
+
+      <Drag
+        className="tw-top-1/2"
+        style={{
+          visibility:
+            dialogContent === null && cartGoods.length > 0
+              ? "visible"
+              : "hidden",
+        }}
+        boundary={{ top: 8, left: 0, bottom: 108, right: 8 }}
+        attract
+      >
+        <Badge value={getCartGoodsCount(cartGoods)}>
+          <Button
+            size="large"
+            className="cart-float"
+            icon={<Cart width={18} />}
+            onClick={openCart}
+          />
+        </Badge>
+      </Drag>
 
       <Popup
         visible={dialogContent}

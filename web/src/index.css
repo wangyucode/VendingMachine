@@ -16,9 +16,11 @@ body,
   --nutui-price-line-font-size: 15px;
   --nutui-price-integer-big-size: 26px;
   --nutui-price-symbol-big-size: 20px;
+  --nutui-notify-font-size: 24px;
+  --nutui-notify-height: 56px;
 }
 
-.App {
+.app {
   height: 100%;
   position: relative;
 }
@@ -78,8 +80,8 @@ body,
   font-size: 24px !important;
 }
 
-.detail .nut-inputnumber div,
-.detail .nut-icon {
+.cart .nut-inputnumber div,
+.cart .nut-icon {
   width: 28px;
   height: 28px;
 }
@@ -94,8 +96,24 @@ body,
   right: 18px !important;
 }
 
-.detail .nut-button {
+.detail .nut-button,
+.cart .nut-button {
   font-size: 18px;
   width: unset;
   padding: 16px 32px;
+}
+
+.app .nut-badge__sup {
+  top: 4px !important;
+  right: 16px !important;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.app .cart-float {
+  width: 50px;
+}
+
+.cart .nut-image{
+  display: inline-block;
 }

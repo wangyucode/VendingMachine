@@ -1,7 +1,28 @@
-import { Divider, Image, Price, InputNumber, Button, Tabbar } from "@nutui/nutui-react";
-import { Cart} from '@nutui/icons-react';
+import { Divider, Image, Price, Button, Badge } from "@nutui/nutui-react";
+import { Cart } from "@nutui/icons-react";
 
-export default function Detail({ goods }) {
+import {getCartGoodsCount} from "./utils"
+
+export default function Detail({
+  setDialogContent,
+  goods,
+  setCartGoods,
+  cartGoods,
+}) {
+  function toCart() {
+    setDialogContent("购物车");
+  }
+
+  function addToCart() {
+    const index = cartGoods.findIndex((e) => e.goods.track === goods.track);
+    if (index === -1) {
+      cartGoods.push({ goods, count: 1 });
+    } else {
+      cartGoods[index] = { goods, count: cartGoods[index].count + 1 };
+    }
+    setCartGoods([...cartGoods]);
+  }
+
   return (
     <div className="detail tw-flex tw-flex-col tw-w-full tw-h-full tw-text-2xl tw-bg-slate-100 tw-overflow-hidden">
       <div className="tw-bg-white tw-p-4 tw-border-b tw-border-slate-300 tw-shadow">
@@ -23,11 +44,6 @@ export default function Detail({ goods }) {
           </div>
         </div>
         <Divider />
-        <div className="tw-w-full tw-flex">
-          数量：
-          <InputNumber defaultValue={1} className="tw-ml-4" />
-        </div>
-        <Divider />
         <div className="tw-w-full tw-mb-2">更多图片：</div>
         {goods.images.map((image, index) => (
           <Image src={image} width="100%" key={index} />
@@ -35,13 +51,20 @@ export default function Detail({ goods }) {
       </div>
 
       <div className="tw-w-full tw-bg-white tw-p-4 tw-flex tw-border-t tw-border-slate-300 tw-shadow tw-justify-between">
-        <Button size="large" className="cart" icon={<Cart width={18}/>}>购物车</Button>
-        <div className="tw-flex">
-          <Button type="warning" size="large">加入购物车</Button>
-          <Button type="primary" size="large" style={{ marginLeft: "8px" }}>
-            立即购买
+        <Badge value={getCartGoodsCount(cartGoods)}>
+          <Button
+            size="large"
+            className="cart"
+            icon={<Cart width={18} />}
+            onClick={toCart}
+            disabled={cartGoods.length === 0}
+          >
+            购物车
           </Button>
-        </div>
+        </Badge>
+        <Button type="warning" size="large" onClick={addToCart}>
+          加入购物车
+        </Button>
       </div>
     </div>
   );

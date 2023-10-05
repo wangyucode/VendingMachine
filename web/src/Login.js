@@ -12,7 +12,7 @@ export default function Login({ setDialogContent }) {
   }
 
   function onPasswordChange(value) {
-    setPassword(password+value);
+    setPassword(password + value);
   }
 
   function onPasswordDelete() {
@@ -24,9 +24,9 @@ export default function Login({ setDialogContent }) {
       <h1 className="tw-text-center">管理员登录</h1>
       <Divider />
       <div className="tw-border tw-p-2 tw-my-4 tw-text-center tw-h-12">{password.replace(/./g,'*')}</div>
-      <Button type="success" className="tw-w-full" onClick={login}>
-        登录
-      </Button>
+        <Button type="success" className="tw-w-full" onClick={login}>
+          登录
+        </Button>
       <NumberKeyboard visible onChange={onPasswordChange} onDelete={onPasswordDelete}/>
     </div>
   );
