@@ -6,6 +6,8 @@ export default function GoodsCart({
   setDialogContent,
   setCartGoods,
   cartGoods,
+  clearCart,
+  countDown
 }) {
   function toBuy() {
     setDialogContent("结算");
@@ -22,7 +24,7 @@ export default function GoodsCart({
   return (
     <div className="cart tw-flex tw-flex-col tw-w-full tw-h-full tw-text-2xl tw-bg-slate-100 tw-overflow-hidden">
       <div className="tw-bg-white tw-p-4 tw-border-b tw-border-slate-300 tw-shadow">
-        <h1 className="tw-text-center">购物车</h1>
+        <h1 className="tw-text-center">购物车{countDown < 11 && <span className="tw-text-xl tw-ml-2" >{`(${countDown}秒后返回)`}</span>}</h1>
       </div>
       <div className="tw-w-full tw-overflow-y-scroll tw-p-4 tw-flex-1">
         {cartGoods.map((c, index) => (
@@ -57,12 +59,14 @@ export default function GoodsCart({
         ))}
       </div>
 
-      <div className="tw-w-full tw-bg-white tw-p-4 tw-flex tw-border-t tw-border-slate-300 tw-shadow tw-justify-end tw-items-center">
-        共计：
+      <div className="tw-w-full tw-bg-white tw-p-4 tw-flex tw-border-t tw-border-slate-300 tw-shadow tw-justify-between tw-items-center">
+        <Button size="large" onClick={clearCart}>清空</Button>
+        <div>共计：
         <Price price={getTotalPrice(cartGoods) / 100} className="tw-mr-4"/>
         <Button type="primary" size="large" onClick={toBuy}>
           结算
         </Button>
+        </div>
       </div>
     </div>
   );

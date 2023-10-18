@@ -2,7 +2,7 @@ import { Divider } from "@nutui/nutui-react";
 
 import wechatUrl from "./wechat.jpg";
 
-export default function About({ setDialogContent }) {
+export default function About({ setDialogContent, countDown }) {
   let clickCount = 0;
   let clickTimeout = 0;
 
@@ -20,7 +20,7 @@ export default function About({ setDialogContent }) {
 
   return (
     <div className="tw-flex tw-flex-col tw-items-center tw-w-full tw-h-full tw-p-4 tw-text-2xl">
-      <h1 className="tw-text-center">联系客服</h1>
+      <h1 className="tw-text-center">联系客服{countDown < 11 && <span className="tw-text-xl tw-ml-2" >{`(${countDown}秒后返回)`}</span>}</h1>
       <Divider />
       <img src={wechatUrl} className="tw-w-1/2" alt="wechat"/>
       <ul className="tw-text-left tw-mt-4">

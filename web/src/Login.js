@@ -3,7 +3,7 @@ import { Divider, Button, NumberKeyboard } from "@nutui/nutui-react";
 
 const secret = process.env.REACT_APP_PASSWORD;
 
-export default function Login({ setDialogContent }) {
+export default function Login({ setDialogContent, countDown }) {
   const [password, setPassword] = useState("");
   function login() {
     if (password === secret) {
@@ -21,7 +21,7 @@ export default function Login({ setDialogContent }) {
 
   return (
     <div className="login tw-w-full tw-h-full tw-p-4 tw-text-2xl tw-text-slate-700">
-      <h1 className="tw-text-center">管理员登录</h1>
+      <h1 className="tw-text-center">管理员登录{countDown < 11 && <span className="tw-text-xl tw-ml-2" >{`(${countDown}秒后返回)`}</span>}</h1>
       <Divider />
       <div className="tw-border tw-p-2 tw-my-4 tw-text-center tw-h-12">{password.replace(/./g,'*')}</div>
         <Button type="success" className="tw-w-full" onClick={login}>

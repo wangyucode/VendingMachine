@@ -10,7 +10,7 @@ import {
   Price,
   Badge,
   Drag,
-  Notify
+  Notify,
 } from "@nutui/nutui-react";
 import { Service, Jdl, Cart } from "@nutui/icons-react";
 
@@ -24,12 +24,15 @@ import { getCartGoodsCount } from "./utils";
 
 let currentGoods = null;
 let iterationTimeoutId = 0;
+let returnCountDownId = 0;
+let currentDialogTitle = null;
 
 function App() {
   const [dialogContent, setDialogContent] = useState(null);
   const [banners, setBanners] = useState([]);
   const [goods, setGoods] = useState([]);
   const [cartGoods, setCartGoods] = useState([]);
+  const [returnCountDown, setReturnCountDown] = useState(60);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/vending/banner`, {
@@ -46,42 +49,84 @@ function App() {
   }, []);
 
   function onClickAbout() {
-    setDialogContent("联系客服");
+    changeDialogContent("联系客服");
   }
 
   function openDetail(goods) {
     currentGoods = goods;
-    setDialogContent("商品详情");
+    changeDialogContent("商品详情");
   }
 
   function openCart() {
-    setDialogContent("购物车");
+    changeDialogContent("购物车");
+  }
+
+  function changeDialogContent(title) {
+    setDialogContent(title);
+    currentDialogTitle = title;
+    setUpDialogTimeout();
+  }
+
+  function setUpDialogTimeout() {
+    clearInterval(returnCountDownId);
+    setReturnCountDown(60);
+    if (currentDialogTitle) {
+      let count = 60;
+      returnCountDownId = setInterval(() => {
+        if (count === 0) {
+          clearInterval(returnCountDownId);
+          setReturnCountDown(60);
+          setDialogContent(null);
+        } else if (count < 11) {
+          setReturnCountDown(count);
+        }
+        count--;
+      }, 1000);
+    }
   }
 
   function getDialogContent() {
     switch (dialogContent) {
       case "联系客服":
-        return <About setDialogContent={setDialogContent} />;
+        return (
+          <About
+            setDialogContent={changeDialogContent}
+            countDown={returnCountDown}
+          />
+        );
       case "系统设置":
-        return <Settings setDialogContent={setDialogContent} />;
+        return (
+          <Settings
+            setDialogContent={changeDialogContent}
+            countDown={returnCountDown}
+          />
+        );
       case "管理员登录":
-        return <Login setDialogContent={setDialogContent} />;
+        return (
+          <Login
+            setDialogContent={changeDialogContent}
+            countDown={returnCountDown}
+          />
+        );
       case "商品详情":
         return (
           <Detail
-            setDialogContent={setDialogContent}
+            setDialogContent={changeDialogContent}
             goods={currentGoods}
             setCartGoods={setCartGoods}
             cartGoods={cartGoods}
+            countDown={returnCountDown}
           />
         );
       case "购物车":
         return (
           <GoodsCart
-            setDialogContent={setDialogContent}
+            setDialogContent={changeDialogContent}
             goods={currentGoods}
             setCartGoods={setCartGoods}
             cartGoods={cartGoods}
+            clearCart={clearCart}
+            countDown={returnCountDown}
           />
         );
 
@@ -92,6 +137,7 @@ function App() {
             goods={currentGoods}
             setCartGoods={setCartGoods}
             cartGoods={cartGoods}
+            countDown={returnCountDown}
           />
         );
       default:
@@ -99,13 +145,39 @@ function App() {
     }
   }
 
-  function onInteraction() {
-    clearTimeout(iterationTimeoutId);
-    iterationTimeoutId = setTimeout(function() {
-      Notify.text("无操作，10秒后返回主页", { duration: 10000 });
-    }, 3000);
+  function clearCart() {
+    setCartGoods([]);
+    setDialogContent(null);
   }
 
+  function onInteraction() {
+    clearInterval(iterationTimeoutId);
+    setUpDialogTimeout();
+    Notify.hide();
+    if (cartGoods.length > 0) {
+      let count = 1800;
+      iterationTimeoutId = setInterval(function () {
+        if (count === 0) {
+          clearInterval(iterationTimeoutId);
+          clearCart();
+          return;
+        } else if (count < 11) {
+          Notify.text(`无操作${count}秒后清空购物车`, { duration: 1000 });
+        }
+        count--;
+      }, 1000);
+    }
+  }
+
+  function bannerClick(banner) {
+    if (banner.goodsId) {
+      const g = goods.find((v) => v.id === banner.goodsId);
+      if (g) {
+        currentGoods = g;
+        changeDialogContent("商品详情");
+      }
+    }
+  }
 
   return (
     <div className="app tw-pt-4" onTouchStart={onInteraction}>
@@ -119,8 +191,14 @@ function App() {
             className="tw-rounded-lg tw-shadow"
           >
             {banners.map((banner) => (
-              <Swiper.Item key={banner._id}>
-                <Image src={banner.image} fit="cover" />
+              <Swiper.Item key={banner._id} onClick={() => bannerClick(banner)}>
+                <Image
+                  src={banner.image}
+                  fit="fill"
+                  className="tw-w-full"
+                  width="778"
+                  height="360"
+                />
               </Swiper.Item>
             ))}
           </Swiper>

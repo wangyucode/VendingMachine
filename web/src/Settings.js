@@ -12,7 +12,7 @@ const packageJson = require("../package.json");
 
 let stopMultiple = false;
 
-export default function Settings({ setDialogContent }) {
+export default function Settings({ setDialogContent, countDown }) {
   const [disabledSerial, setDisabledSerial] = useState(false);
   const [trackIndex, setTrackIndex] = useState(1);
   const [trackType, setTrackType] = useState("3");
@@ -108,7 +108,7 @@ export default function Settings({ setDialogContent }) {
 
   return (
     <div className="Settings tw-w-full tw-h-full tw-p-4 tw-text-2xl tw-text-slate-700">
-      <h1 className="tw-text-center">系统设置</h1>
+      <h1 className="tw-text-center">系统设置{countDown < 11 && <span className="tw-text-xl tw-ml-2" >{`(${countDown}秒后返回)`}</span>}</h1>
       <Divider />
       <div className="track tw-flex tw-mt-2 tw-text-lg tw-items-center">
         货道:
