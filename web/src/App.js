@@ -210,7 +210,7 @@ function App() {
 
   function bannerClick(banner) {
     if (banner.goodsId) {
-      const g = goods.find((v) => v.id === banner.goodsId);
+      const g = goods.find((v) => v._id === banner.goodsId);
       if (g) {
         currentGoods = g;
         changeDialogContent("商品详情");
@@ -224,19 +224,21 @@ function App() {
         <Col span="18">
           <Swiper
             height={360}
+            width={778}
             autoPlay={3000}
+            preventDefault={false}
             indicator
             loop
             className="tw-rounded-lg tw-shadow"
           >
             {banners.map((banner) => (
-              <Swiper.Item key={banner._id} onClick={() => bannerClick(banner)}>
+              <Swiper.Item key={banner._id}>
                 <Image
                   src={banner.image}
                   fit="fill"
-                  className="tw-w-full"
                   width="778"
                   height="360"
+                  onClick={() => bannerClick(banner)}
                 />
               </Swiper.Item>
             ))}
