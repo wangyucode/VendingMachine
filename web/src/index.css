@@ -56,7 +56,7 @@ body,
   border-top-right-radius: 8px;
 }
 
-.login .nut-overlay {
+.login .nut-overlay, .code .nut-overlay {
   display: none;
 }
 

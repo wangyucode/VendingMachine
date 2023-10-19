@@ -22,6 +22,7 @@ import GoodsCart from "./GoodsCart";
 import Buy from "./Buy";
 import Send from "./Send";
 import { getCartGoodsCount } from "./utils";
+import Code from "./Code";
 
 let currentGoods = null;
 let iterationTimeoutId = 0;
@@ -30,8 +31,8 @@ let currentDialogTitle = null;
 export const orderStore = {
   ordering: false,
   checkIntervalId: 0,
-  orderId: null
-}
+  orderId: null,
+};
 
 function App() {
   const [dialogContent, setDialogContent] = useState(null);
@@ -69,7 +70,7 @@ function App() {
   }
 
   function codeGetGoods() {
-    changeDialogContent("出货");
+    changeDialogContent("提货码");
   }
 
   function changeDialogContent(title) {
@@ -168,6 +169,14 @@ function App() {
             sendingGoods={sendingGoods}
             setSendingGoods={setSendingGoods}
             setUpDialogTimeout={setUpDialogTimeout}
+          />
+        );
+      case "提货码":
+        return (
+          <Code
+            setDialogContent={setDialogContent}
+            countDown={returnCountDown}
+            setSendingGoods={setSendingGoods}
           />
         );
       default:

@@ -1,91 +1,52 @@
-import { CircleProgress } from "@nutui/nutui-react";
-import { useState, useEffect } from "react";
+import { Button, NumberKeyboard } from "@nutui/nutui-react";
+import { useState } from "react";
 
-import { sendMsg, sendSerialMsg, sleep } from "./android";
-import { postLog } from "./utils";
+export default function Code({ setDialogContent, countDown, setSendingGoods }) {
+  const [code, setCode] = useState("");
+  const [disabled, setDisabled] = useState(false);
 
-let sending = false;
-
-export default function Code({
-  sendingGoods,
-  countDown,
-  setSendingGoods,
-  setUpDialogTimeout,
-}) {
-  // const total = getTotalPrice(cartGoods);
-  const [info, setInfo] = useState("");
-  const [total, setTotal] = useState(0);
-  const [current, setCurrent] = useState(1);
-  const [logs, setLogs] = useState("");
-  const [color, setColor] = useState("#ef4444");
-
-  useEffect(() => {
-    sendAll();
-  }, []);
-
-  async function sendAll() {
-    if (!sending) {
-      sending = true;
-      const flatGoods = sendingGoods.flatMap((g) => {
-        let goodsArray = [];
-        for (let i = 0; i < g.count; i++) {
-          goodsArray.push(g.track);
-        }
-        return goodsArray;
-      });
-      setTotal(flatGoods.length);
-      let logsBuilder = "请在：";
-      for (let i = 0; i < flatGoods.length; i++) {
-        const track = flatGoods[i];
-        setCurrent(i);
-        setInfo(`货道${track}正在出货`);
-        logsBuilder += `${track}, `;
-        await send(track);
-      }
-      setInfo("出货完成");
-      setCurrent(flatGoods.length);
-      logsBuilder += "号取出您的商品";
-      setLogs(logsBuilder);
-      setUpDialogTimeout();
-      setSendingGoods([]);
-      setColor("#22c55e");
+  async function check() {
+    if (!code) return;
+    setDisabled(true);
+    const res = await fetch(
+      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/code?code=${code}`,
+      { headers: { "X-API-Key": process.env.REACT_APP_API_KEY } }
+    );
+    const data = await res.json();
+    console.log(data);
+    if (data && data.success) {
+      setSendingGoods(data.payload.goods);
+      setDialogContent("出货");
     }
+    setDisabled(false);
   }
 
-  async function send(track) {
-    const index = Number.parseInt(track - 1)
-      .toString(16)
-      .padStart(2, "0");
-    const data = `01 05 ${index} 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
-    sendSerialMsg(data, (req, res) => console.log(`\ns:${req}\nr:${res}`));
-    await sleep(3000);
-    const queryData = `01 03 ${index} 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
-    sendSerialMsg(queryData, (req, res) => console.log(`\ns:${req}\nr:${res}`));
-    await sleep(100);
+  function onChange(value) {
+    setCode(code + value);
+  }
+
+  function onDelete() {
+    setCode(code.slice(0, -1));
   }
 
   return (
-    <div className="cart tw-flex tw-flex-col tw-w-full tw-h-full tw-text-2xl tw-bg-slate-100 tw-overflow-hidden">
+    <div className="code tw-flex tw-flex-col tw-w-full tw-h-full tw-text-2xl tw-bg-slate-100 tw-overflow-hidden">
       <div className="tw-bg-white tw-p-4 tw-border-b tw-border-slate-300 tw-shadow">
         <h1 className="tw-text-center">
-          出货
+          提货码取货
           {countDown < 11 && (
             <span className="tw-text-xl tw-ml-2">{`(${countDown}秒后返回)`}</span>
           )}
         </h1>
       </div>
-      <div className="tw-w-full tw-overflow-y-scroll tw-p-4 tw-flex-1 tw-items-center tw-flex tw-flex-col tw-justify-center">
-        <CircleProgress
-          percent={(current / total) * 100}
-          strokeWidth={10}
-          radius={100}
-          color={color}
-          className="tw-mt-4"
-        >
-          <div className="tw-text-xl">{info}</div>
-          <div className="tw-text-2xl tw-font-bold tw-mt-2" style={{color}}>{`${current}/${total}`}</div>
-        </CircleProgress>
-        <div className="tw-mt-4">{logs}</div>
+      <div className="tw-w-full tw-overflow-y-scroll tw-p-4 tw-flex-1 tw-items-center tw-flex tw-flex-col">
+        <div className="tw-border tw-p-2 tw-my-4 tw-text-center tw-h-12 tw-w-full tw-bg-white">
+          {code}
+        </div>
+        <Button type="success" className="tw-w-full" onClick={check} disabled={disabled}>
+          取货
+        </Button>
+        <NumberKeyboard visible onChange={onChange} onDelete={onDelete} />
       </div>
     </div>
   );
