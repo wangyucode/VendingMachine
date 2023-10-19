@@ -20,6 +20,7 @@ import Login from "./Login";
 import Detail from "./Detail";
 import GoodsCart from "./GoodsCart";
 import Buy from "./Buy";
+import Send from "./Send";
 import { getCartGoodsCount } from "./utils";
 
 let currentGoods = null;
@@ -33,6 +34,7 @@ function App() {
   const [goods, setGoods] = useState([]);
   const [cartGoods, setCartGoods] = useState([]);
   const [returnCountDown, setReturnCountDown] = useState(60);
+  const [sendingGoods, setSendingGoods] = useState([]);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/vending/banner`, {
@@ -61,17 +63,26 @@ function App() {
     changeDialogContent("购物车");
   }
 
+  function codeGetGoods() {
+    changeDialogContent("出货");
+  }
+
   function changeDialogContent(title) {
     setDialogContent(title);
     currentDialogTitle = title;
-    setUpDialogTimeout();
+    if (currentDialogTitle === "出货") {
+      clearInterval(returnCountDownId);
+      setReturnCountDown(60);
+    } else {
+      setUpDialogTimeout();
+    }
   }
 
   function setUpDialogTimeout() {
     clearInterval(returnCountDownId);
     setReturnCountDown(60);
     if (currentDialogTitle) {
-      let count = 60;
+      let count = 180;
       returnCountDownId = setInterval(() => {
         if (count === 0) {
           clearInterval(returnCountDownId);
@@ -138,6 +149,17 @@ function App() {
             setCartGoods={setCartGoods}
             cartGoods={cartGoods}
             countDown={returnCountDown}
+            setSendingGoods={setSendingGoods}
+          />
+        );
+      case "出货":
+        return (
+          <Send
+            setDialogContent={setDialogContent}
+            countDown={returnCountDown}
+            sendingGoods={sendingGoods}
+            setSendingGoods={setSendingGoods}
+            setUpDialogTimeout={setUpDialogTimeout}
           />
         );
       default:
@@ -155,7 +177,7 @@ function App() {
     setUpDialogTimeout();
     Notify.hide();
     if (cartGoods.length > 0) {
-      let count = 1800;
+      let count = 600;
       iterationTimeoutId = setInterval(function () {
         if (count === 0) {
           clearInterval(iterationTimeoutId);
@@ -213,7 +235,12 @@ function App() {
             >
               联系客服
             </Button>
-            <Button className="main-btn code" type="success" icon={<Jdl />}>
+            <Button
+              className="main-btn code"
+              type="success"
+              icon={<Jdl />}
+              onClick={codeGetGoods}
+            >
               取件码取货
             </Button>
           </div>

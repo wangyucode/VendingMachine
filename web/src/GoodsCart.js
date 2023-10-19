@@ -7,29 +7,41 @@ export default function GoodsCart({
   setCartGoods,
   cartGoods,
   clearCart,
-  countDown
+  countDown,
 }) {
   function toBuy() {
     setDialogContent("结算");
   }
 
   function updateCount(value, index) {
-    cartGoods[index] = {
-      goods: cartGoods[index].goods,
-      count: Number.parseInt(value),
-    };
+    const count = Number.parseInt(value);
+    if (count === 0) {
+      cartGoods = cartGoods.filter((_, i) => i !== index);
+      if (cartGoods.length === 0) setDialogContent(null);
+    } else {
+      cartGoods[index] = {
+        goods: cartGoods[index].goods,
+        count,
+      };
+    }
+
     setCartGoods([...cartGoods]);
   }
 
   return (
     <div className="cart tw-flex tw-flex-col tw-w-full tw-h-full tw-text-2xl tw-bg-slate-100 tw-overflow-hidden">
       <div className="tw-bg-white tw-p-4 tw-border-b tw-border-slate-300 tw-shadow">
-        <h1 className="tw-text-center">购物车{countDown < 11 && <span className="tw-text-xl tw-ml-2" >{`(${countDown}秒后返回)`}</span>}</h1>
+        <h1 className="tw-text-center">
+          购物车
+          {countDown < 11 && (
+            <span className="tw-text-xl tw-ml-2">{`(${countDown}秒后返回)`}</span>
+          )}
+        </h1>
       </div>
       <div className="tw-w-full tw-overflow-y-scroll tw-p-4 tw-flex-1">
         {cartGoods.map((c, index) => (
-          <div className="tw-bg-white tw-flex" key={c.goods._id}>
-            <Image src={c.goods.mainImg} width="128" height="128" fit="cover" />
+          <div className="tw-bg-white tw-flex tw-mt-1" key={c.goods._id}>
+            <Image src={c.goods.mainImg} width="128" height="128" fit="fill" />
             <div className="tw-flex tw-flex-col tw-px-4 tw-py-2 tw-justify-between tw-flex-1">
               <div>{c.goods.name}</div>
               <div className="tw-flex">
@@ -51,6 +63,7 @@ export default function GoodsCart({
                 </div>
                 <InputNumber
                   value={c.count}
+                  min={0}
                   onChange={(value) => updateCount(value, index)}
                 />
               </div>
@@ -60,12 +73,15 @@ export default function GoodsCart({
       </div>
 
       <div className="tw-w-full tw-bg-white tw-p-4 tw-flex tw-border-t tw-border-slate-300 tw-shadow tw-justify-between tw-items-center">
-        <Button size="large" onClick={clearCart}>清空</Button>
-        <div>共计：
-        <Price price={getTotalPrice(cartGoods) / 100} className="tw-mr-4"/>
-        <Button type="primary" size="large" onClick={toBuy}>
-          结算
+        <Button size="large" onClick={clearCart}>
+          清空
         </Button>
+        <div>
+          共计：
+          <Price price={getTotalPrice(cartGoods) / 100} className="tw-mr-4" />
+          <Button type="primary" size="large" onClick={toBuy}>
+            结算
+          </Button>
         </div>
       </div>
     </div>
