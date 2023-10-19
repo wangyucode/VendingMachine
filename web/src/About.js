@@ -25,7 +25,7 @@ export default function About({ setDialogContent, countDown }) {
       <img src={wechatUrl} className="tw-w-1/2" alt="wechat"/>
       <ul className="tw-text-left tw-mt-4">
         <li>• 无人售货加盟</li>
-        <li>• 永久免费的售货机系统，定制开发，过户</li>
+        <li>• 售货机系统，定制开发，过户</li>
         <li>• 各种APP开发</li>
         <li>• 网站开发</li>
         <li>• 小程序开发</li>

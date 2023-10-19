@@ -1,12 +1,12 @@
 import { CircleProgress } from "@nutui/nutui-react";
 import { useState, useEffect } from "react";
 
-import { sendSerialMsg, sleep } from "./android";
+import { sendMsg, sendSerialMsg, sleep } from "./android";
 import { postLog } from "./utils";
 
 let sending = false;
 
-export default function Send({
+export default function Code({
   sendingGoods,
   countDown,
   setSendingGoods,
@@ -46,7 +46,7 @@ export default function Send({
       setCurrent(flatGoods.length);
       logsBuilder += "号取出您的商品";
       setLogs(logsBuilder);
-      setUpDialogTimeout(11);
+      setUpDialogTimeout();
       setSendingGoods([]);
       setColor("#22c55e");
     }
@@ -57,10 +57,10 @@ export default function Send({
       .toString(16)
       .padStart(2, "0");
     const data = `01 05 ${index} 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
-    sendSerialMsg(data, (req, res) => postLog(`\ns:${req}\nr:${res}`));
+    sendSerialMsg(data, (req, res) => console.log(`\ns:${req}\nr:${res}`));
     await sleep(3000);
     const queryData = `01 03 ${index} 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
-    sendSerialMsg(queryData, (req, res) => postLog(`\ns:${req}\nr:${res}`));
+    sendSerialMsg(queryData, (req, res) => console.log(`\ns:${req}\nr:${res}`));
     await sleep(100);
   }
 

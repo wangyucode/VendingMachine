@@ -27,6 +27,11 @@ let currentGoods = null;
 let iterationTimeoutId = 0;
 let returnCountDownId = 0;
 let currentDialogTitle = null;
+export const orderStore = {
+  ordering: false,
+  checkIntervalId: 0,
+  orderId: null
+}
 
 function App() {
   const [dialogContent, setDialogContent] = useState(null);
@@ -78,14 +83,19 @@ function App() {
     }
   }
 
-  function setUpDialogTimeout() {
+  function setUpDialogTimeout(count = 180) {
     clearInterval(returnCountDownId);
+    clearInterval(orderStore.checkIntervalId);
+    orderStore.ordering = false;
+    orderStore.orderId = null;
     setReturnCountDown(60);
     if (currentDialogTitle) {
-      let count = 180;
       returnCountDownId = setInterval(() => {
         if (count === 0) {
           clearInterval(returnCountDownId);
+          clearInterval(orderStore.checkIntervalId);
+          orderStore.ordering = false;
+          orderStore.orderId = null;
           setReturnCountDown(60);
           setDialogContent(null);
         } else if (count < 11) {
@@ -133,7 +143,6 @@ function App() {
         return (
           <GoodsCart
             setDialogContent={changeDialogContent}
-            goods={currentGoods}
             setCartGoods={setCartGoods}
             cartGoods={cartGoods}
             clearCart={clearCart}
@@ -145,7 +154,6 @@ function App() {
         return (
           <Buy
             setDialogContent={setDialogContent}
-            goods={currentGoods}
             setCartGoods={setCartGoods}
             cartGoods={cartGoods}
             countDown={returnCountDown}

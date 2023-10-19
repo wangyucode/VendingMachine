@@ -6,34 +6,33 @@ import UQRCode from "uqrcodejs";
 import { getCartGoodsCount, getTotalPrice, postLog } from "./utils";
 import wxPayLogo from "./wxpay.png";
 
-let ordering = false;
-let checkIntervalId = 0;
-let orderId = null;
+import { orderStore } from "./App";
 
 export default function Buy({
   setDialogContent,
   setCartGoods,
   cartGoods,
   countDown,
-  setSendingGoods
+  setSendingGoods,
 }) {
-  const description = cartGoods.length > 0 ? `${cartGoods[0].goods.name} 等 ${getCartGoodsCount(
-    cartGoods
-  )} 件商品`: '';
+  const description =
+    cartGoods.length > 0
+      ? `${cartGoods[0].goods.name} 等 ${getCartGoodsCount(cartGoods)} 件商品`
+      : "";
   const total = getTotalPrice(cartGoods);
 
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    if (cartGoods.length > 0 && !ordering) {
-      ordering = true;
+    if (cartGoods.length > 0 && !orderStore.ordering) {
+      orderStore.ordering = true;
       const goodsDetail = cartGoods.map((cg) => ({
         count: cg.count,
         id: cg.goods._id,
         name: cg.goods.name,
         type: cg.goods.type,
-        price:  cg.goods.price,
-        track: cg.goods.track
+        price: cg.goods.price,
+        track: cg.goods.track,
       }));
       const params = { goodsDetail, total, description };
       fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/vending/order`, {
@@ -48,8 +47,8 @@ export default function Buy({
         .then((data) => {
           if (data.success && data.payload.code_url) {
             drawCanvas(data.payload.code_url);
-            orderId = data.payload.out_trade_no;
-            checkIntervalId = setInterval(checkOrder, 2000);
+            orderStore.orderId = data.payload.out_trade_no;
+            orderStore.checkIntervalId = setInterval(checkOrder, 2000);
           } else {
             console.error(data);
             cancel();
@@ -60,12 +59,12 @@ export default function Buy({
   }, []);
 
   async function checkOrder() {
-    if (orderId === null) {
-      clearInterval(checkIntervalId);
+    if (orderStore.orderId === null) {
+      clearInterval(orderStore.checkIntervalId);
       return;
     }
     const res = await fetch(
-      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/order?id=${orderId}`,
+      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/order?id=${orderStore.orderId}`,
       { headers: { "X-API-Key": process.env.REACT_APP_API_KEY } }
     );
     const data = await res.json();
@@ -77,10 +76,10 @@ export default function Buy({
       data.payload.trade_state === "SUCCESS"
     ) {
       setSendingGoods(data.payload.goodsDetail);
-      clearInterval(checkIntervalId);
+      clearInterval(orderStore.checkIntervalId);
       setCartGoods([]);
-      ordering = false;
-      orderId = null;
+      orderStore.ordering = false;
+      orderStore.orderId = null;
       setDialogContent("出货");
     }
   }
@@ -99,8 +98,8 @@ export default function Buy({
   }
 
   function cancel() {
-    ordering = false;
-    orderId = null;
+    orderStore.ordering = false;
+    orderStore.orderId = null;
     setDialogContent("购物车");
   }
 
