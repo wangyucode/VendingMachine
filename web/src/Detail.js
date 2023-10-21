@@ -37,12 +37,13 @@ export default function Detail({
             <Price price={goods.originalPrice / 100} className="tw-ml-4" line />
           )}
         </div>
-        <div className="tw-text-left tw-w-full">{goods.name}</div>
-        <div className="tw-w-full tw-flex tw-mt-2">
-          货道：
-          <div className="tw-bg-emerald-500 tw-mr-1 tw-text-2xl tw-px-2 tw-rounded tw-text-white tw-font-bold">
+        <div className="tw-text-left tw-w-full tw-font-bold">{goods.name}</div>
+        <div className="tw-w-full tw-flex tw-mt-4">
+          货道
+          <div className="tw-bg-emerald-500 tw-mx-4 tw-px-2 tw-rounded tw-text-white tw-font-bold">
             {goods.track}
           </div>
+          仅剩{goods.stock}件
         </div>
         <Divider />
         <div className="tw-w-full tw-mb-2">更多图片：</div>

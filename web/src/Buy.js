@@ -3,7 +3,7 @@ import { Button, Price } from "@nutui/nutui-react";
 import { Cart } from "@nutui/icons-react";
 import UQRCode from "uqrcodejs";
 
-import { getCartGoodsCount, getTotalPrice, postLog } from "./utils";
+import { getCartGoodsCount, getTotalPrice } from "./utils";
 import wxPayLogo from "./wxpay.png";
 
 import { orderStore } from "./App";
@@ -50,9 +50,7 @@ export default function Buy({
             orderStore.orderId = data.payload.out_trade_no;
             orderStore.checkIntervalId = setInterval(checkOrder, 2000);
           } else {
-            console.error(data);
             cancel();
-            postLog(JSON.stringify(data));
           }
         });
     }
@@ -90,7 +88,7 @@ export default function Buy({
       const ctx = canvas.getContext("2d");
       const qr = new UQRCode();
       qr.data = url;
-      qr.size = 200;
+      qr.size = 256;
       qr.make();
       qr.canvasContext = ctx;
       qr.drawCanvas();
@@ -120,7 +118,7 @@ export default function Buy({
           <Price price={total / 100} className="tw-mr-4" />
         </div>
         <img src={wxPayLogo} width={192} className="tw-mt-12" />
-        <canvas ref={canvasRef} width="200" height="200" className="tw-mt-4" />
+        <canvas ref={canvasRef} width="256" height="256" className="tw-mt-8" />
       </div>
     </div>
   );

@@ -10,6 +10,9 @@ export function getTotalPrice(cartGoods) {
   return total;
 }
 
-export function postLog(message) {
-  fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/log`, {method: 'POST', body: message});
+export function postLog(message, type) {
+  fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/log`, {
+    method: "POST",
+    body: JSON.stringify({ message, type }),
+  });
 }

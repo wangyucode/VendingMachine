@@ -28,6 +28,7 @@ let currentGoods = null;
 let iterationTimeoutId = 0;
 let returnCountDownId = 0;
 let currentDialogTitle = null;
+let heartbeatIntervalId = 0;
 export const orderStore = {
   ordering: false,
   checkIntervalId: 0,
@@ -41,20 +42,54 @@ function App() {
   const [cartGoods, setCartGoods] = useState([]);
   const [returnCountDown, setReturnCountDown] = useState(60);
   const [sendingGoods, setSendingGoods] = useState([]);
+  const [closeable, setCloseable] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/vending/banner`, {
-      headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
-    })
-      .then((res) => res.json())
-      .then((data) => setBanners(data.payload));
-
-    fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/vending/goods`, {
-      headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
-    })
-      .then((res) => res.json())
-      .then((data) => setGoods(data.payload));
+    fetchBanner();
+    fetchGoods();
+    if (!heartbeatIntervalId)
+      heartbeatIntervalId = setInterval(heartbeat, 5 * 60 * 1000);
   }, []);
+
+  async function heartbeat() {
+    const res = await fetch(
+      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/heartbeat`,
+      {
+        headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+      }
+    );
+    const data = await res.json();
+    if (data && data.success) {
+      if (data.payload.value.updateGoods) fetchGoods();
+      if (data.payload.value.updateBanner) fetchBanner();
+    }
+  }
+
+  async function fetchBanner() {
+    const res = await fetch(
+      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/banner`,
+      {
+        headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+      }
+    );
+    const data = await res.json();
+    if (data && data.success) {
+      setBanners(data.payload);
+    }
+  }
+
+  async function fetchGoods() {
+    const res = await fetch(
+      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/goods`,
+      {
+        headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+      }
+    );
+    const data = await res.json();
+    if (data && data.success) {
+      setGoods(data.payload);
+    }
+  }
 
   function onClickAbout() {
     changeDialogContent("联系客服");
@@ -79,8 +114,10 @@ function App() {
     if (currentDialogTitle === "出货") {
       clearInterval(returnCountDownId);
       setReturnCountDown(60);
+      setCloseable(false);
     } else {
       setUpDialogTimeout();
+      setCloseable(true);
     }
   }
 
@@ -154,7 +191,7 @@ function App() {
       case "结算":
         return (
           <Buy
-            setDialogContent={setDialogContent}
+            setDialogContent={changeDialogContent}
             setCartGoods={setCartGoods}
             cartGoods={cartGoods}
             countDown={returnCountDown}
@@ -164,19 +201,21 @@ function App() {
       case "出货":
         return (
           <Send
-            setDialogContent={setDialogContent}
             countDown={returnCountDown}
             sendingGoods={sendingGoods}
             setSendingGoods={setSendingGoods}
             setUpDialogTimeout={setUpDialogTimeout}
+            fetchGoods={fetchGoods}
+            setCloseable={setCloseable}
           />
         );
       case "提货码":
         return (
           <Code
-            setDialogContent={setDialogContent}
+            setDialogContent={changeDialogContent}
             countDown={returnCountDown}
             setSendingGoods={setSendingGoods}
+            setUpDialogTimeout={setUpDialogTimeout}
           />
         );
       default:
@@ -316,7 +355,8 @@ function App() {
         style={{ height: "60%", width: "60%" }}
         title={dialogContent}
         lockScroll={true}
-        closeable
+        closeable={closeable}
+        closeOnOverlayClick={closeable}
         round
         onClose={() => setDialogContent(null)}
       >

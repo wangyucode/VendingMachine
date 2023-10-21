@@ -1,9 +1,15 @@
-import { Button, NumberKeyboard } from "@nutui/nutui-react";
 import { useState } from "react";
+import { Button, NumberKeyboard, Toast } from "@nutui/nutui-react";
 
-export default function Code({ setDialogContent, countDown, setSendingGoods }) {
+export default function Code({
+  setDialogContent,
+  countDown,
+  setSendingGoods,
+  setUpDialogTimeout,
+}) {
   const [code, setCode] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const [error, setError] = useState(null);
 
   async function check() {
     if (!code) return;
@@ -14,19 +20,24 @@ export default function Code({ setDialogContent, countDown, setSendingGoods }) {
     );
     const data = await res.json();
     console.log(data);
-    if (data && data.success) {
+    if (data && data.success && !data.payload.usedTime) {
       setSendingGoods(data.payload.goods);
       setDialogContent("出货");
+    } else {
+      setError("取货码不存在或已被使用");
+      setUpDialogTimeout(10);
     }
     setDisabled(false);
   }
 
   function onChange(value) {
     setCode(code + value);
+    setError(null);
   }
 
   function onDelete() {
     setCode(code.slice(0, -1));
+    setError(null);
   }
 
   return (
@@ -43,9 +54,19 @@ export default function Code({ setDialogContent, countDown, setSendingGoods }) {
         <div className="tw-border tw-p-2 tw-my-4 tw-text-center tw-h-12 tw-w-full tw-bg-white">
           {code}
         </div>
-        <Button type="success" className="tw-w-full" onClick={check} disabled={disabled}>
+        <Button
+          type="success"
+          className="tw-w-full"
+          onClick={check}
+          disabled={disabled}
+        >
           取货
         </Button>
+        {error && (
+          <div className="tw-w-full tw-border tw-rounded-lg tw-text-red-500 tw-border-red-500 tw-bg-red-200 tw-text-base tw-text-center tw-p-1 tw-mt-4">
+            {error}
+          </div>
+        )}
         <NumberKeyboard visible onChange={onChange} onDelete={onDelete} />
       </div>
     </div>

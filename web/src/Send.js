@@ -11,6 +11,8 @@ export default function Send({
   countDown,
   setSendingGoods,
   setUpDialogTimeout,
+  fetchGoods,
+  setCloseable
 }) {
   // const total = getTotalPrice(cartGoods);
   const [info, setInfo] = useState("");
@@ -49,6 +51,9 @@ export default function Send({
       setUpDialogTimeout(11);
       setSendingGoods([]);
       setColor("#22c55e");
+      fetchGoods();
+      setCloseable(true);
+      sending = false;
     }
   }
 
@@ -62,6 +67,12 @@ export default function Send({
     const queryData = `01 03 ${index} 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
     sendSerialMsg(queryData, (req, res) => postLog(`\ns:${req}\nr:${res}`));
     await sleep(100);
+    await fetch(
+      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/reduce?track=${track}`,
+      {
+        headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+      }
+    );
   }
 
   return (
@@ -83,7 +94,10 @@ export default function Send({
           className="tw-mt-4"
         >
           <div className="tw-text-xl">{info}</div>
-          <div className="tw-text-2xl tw-font-bold tw-mt-2" style={{color}}>{`${current}/${total}`}</div>
+          <div
+            className="tw-text-2xl tw-font-bold tw-mt-2"
+            style={{ color }}
+          >{`${current}/${total}`}</div>
         </CircleProgress>
         <div className="tw-mt-4">{logs}</div>
       </div>
