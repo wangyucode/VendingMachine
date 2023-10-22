@@ -1,14 +1,14 @@
-import { Divider, Image, Price, Button, Badge } from "@nutui/nutui-react";
+import { Divider, Image, Price, Button, Badge,Toast } from "@nutui/nutui-react";
 import { Cart } from "@nutui/icons-react";
 
-import {getCartGoodsCount} from "./utils"
+import { getCartGoodsCount } from "./utils";
 
 export default function Detail({
   setDialogContent,
   goods,
   setCartGoods,
   cartGoods,
-  countDown
+  countDown,
 }) {
   function toCart() {
     setDialogContent("购物车");
@@ -19,7 +19,11 @@ export default function Detail({
     if (index === -1) {
       cartGoods.push({ goods, count: 1 });
     } else {
-      cartGoods[index] = { goods, count: cartGoods[index].count + 1 };
+      if (goods.stock > cartGoods[index].count) {
+        cartGoods[index] = { goods, count: cartGoods[index].count + 1 };
+      } else {
+        Toast.show("库存不足");
+      }
     }
     setCartGoods([...cartGoods]);
   }
@@ -27,7 +31,12 @@ export default function Detail({
   return (
     <div className="detail tw-flex tw-flex-col tw-w-full tw-h-full tw-text-2xl tw-bg-slate-100 tw-overflow-hidden">
       <div className="tw-bg-white tw-p-4 tw-border-b tw-border-slate-300 tw-shadow">
-        <h1 className="tw-text-center">商品详情{countDown < 11 && <span className="tw-text-xl tw-ml-2" >{`(${countDown}秒后返回)`}</span>}</h1>
+        <h1 className="tw-text-center">
+          商品详情
+          {countDown < 11 && (
+            <span className="tw-text-xl tw-ml-2">{`(${countDown}秒后返回)`}</span>
+          )}
+        </h1>
       </div>
       <div className="tw-w-full tw-overflow-y-scroll tw-p-4">
         <Image src={goods.mainImg} width="100%" />

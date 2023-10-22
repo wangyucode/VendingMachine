@@ -118,3 +118,7 @@ body,
 .cart .nut-image{
   display: inline-block;
 }
+
+.nut-toast__overlay-default{
+  z-index: 3000 !important;
+}

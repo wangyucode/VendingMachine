@@ -64,6 +64,7 @@ export default function GoodsCart({
                 <InputNumber
                   value={c.count}
                   min={0}
+                  max={c.goods.stock}
                   onChange={(value) => updateCount(value, index)}
                 />
               </div>

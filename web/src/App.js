@@ -354,11 +354,11 @@ function App() {
         visible={dialogContent}
         style={{ height: "60%", width: "60%" }}
         title={dialogContent}
-        lockScroll={true}
         closeable={closeable}
         closeOnOverlayClick={closeable}
-        round
         onClose={() => setDialogContent(null)}
+        round
+        lockScroll
       >
         {getDialogContent()}
       </Popup>
