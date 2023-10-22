@@ -38,7 +38,7 @@ export default function Detail({
           )}
         </h1>
       </div>
-      <div className="tw-w-full tw-overflow-y-scroll tw-p-4">
+      <div className="tw-w-full tw-overflow-y-scroll tw-p-4 tw-flex-1">
         <Image src={goods.mainImg} width="100%" />
         <div className="tw-mt-2 tw-w-full">
           <Price price={goods.price / 100} />
@@ -49,7 +49,7 @@ export default function Detail({
         <div className="tw-text-left tw-w-full tw-font-bold">{goods.name}</div>
         <div className="tw-w-full tw-flex tw-mt-4">
           货道
-          <div className="tw-bg-emerald-500 tw-mx-4 tw-px-2 tw-rounded tw-text-white tw-font-bold">
+          <div className="track tw-mx-4 tw-px-2 tw-rounded tw-font-bold">
             {goods.track}
           </div>
           仅剩{goods.stock}件

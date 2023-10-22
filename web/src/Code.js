@@ -9,7 +9,6 @@ export default function Code({
 }) {
   const [code, setCode] = useState("");
   const [disabled, setDisabled] = useState(false);
-  const [error, setError] = useState(null);
 
   async function check() {
     if (!code) return;
@@ -24,7 +23,7 @@ export default function Code({
       setSendingGoods(data.payload.goods);
       setDialogContent("出货");
     } else {
-      setError("取货码不存在或已被使用");
+      Toast.show("取货码不存在或已被使用");
       setUpDialogTimeout(10);
     }
     setDisabled(false);
@@ -32,12 +31,10 @@ export default function Code({
 
   function onChange(value) {
     setCode(code + value);
-    setError(null);
   }
 
   function onDelete() {
     setCode(code.slice(0, -1));
-    setError(null);
   }
 
   return (
@@ -62,11 +59,6 @@ export default function Code({
         >
           取货
         </Button>
-        {error && (
-          <div className="tw-w-full tw-border tw-rounded-lg tw-text-red-500 tw-border-red-500 tw-bg-red-200 tw-text-base tw-text-center tw-p-1 tw-mt-4">
-            {error}
-          </div>
-        )}
         <NumberKeyboard visible onChange={onChange} onDelete={onDelete} />
       </div>
     </div>

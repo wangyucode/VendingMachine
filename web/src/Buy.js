@@ -1,6 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Button, Price } from "@nutui/nutui-react";
-import { Cart } from "@nutui/icons-react";
+import { useEffect, useRef, useState } from "react";
+import { Price, Loading } from "@nutui/nutui-react";
 import UQRCode from "uqrcodejs";
 
 import { getCartGoodsCount, getTotalPrice } from "./utils";
@@ -22,9 +21,11 @@ export default function Buy({
   const total = getTotalPrice(cartGoods);
 
   const canvasRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (cartGoods.length > 0 && !orderStore.ordering) {
+      setLoading(true);
       orderStore.ordering = true;
       const goodsDetail = cartGoods.map((cg) => ({
         count: cg.count,
@@ -52,6 +53,7 @@ export default function Buy({
           } else {
             cancel();
           }
+          setLoading(false);
         });
     }
   }, []);
@@ -118,6 +120,7 @@ export default function Buy({
           <Price price={total / 100} className="tw-mr-4" />
         </div>
         <img src={wxPayLogo} width={192} className="tw-mt-12" />
+        {loading && <Loading type="circular" className="tw-mt-8" />}
         <canvas ref={canvasRef} width="256" height="256" className="tw-mt-8" />
       </div>
     </div>

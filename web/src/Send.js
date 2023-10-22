@@ -14,7 +14,6 @@ export default function Send({
   fetchGoods,
   setCloseable
 }) {
-  // const total = getTotalPrice(cartGoods);
   const [info, setInfo] = useState("");
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);

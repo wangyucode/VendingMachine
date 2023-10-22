@@ -310,7 +310,7 @@ function App() {
             <div>
               <Image src={g.mainImg} width="250" height="250" fit="cover" />
 
-              <p className="tw-text-xl tw-mt-2 tw-mx-2">{g.name}</p>
+              <p className="tw-text-xl tw-mt-2 tw-mx-2 tw-font-bold">{g.name}</p>
               <div className="tw-flex tw-items-center tw-gap-2  tw-m-2">
                 <div className="tw-bg-emerald-500 tw-mr-1 tw-text-2xl tw-px-2 tw-rounded tw-text-white tw-font-bold">
                   {g.track}
@@ -319,7 +319,7 @@ function App() {
                 {g.originalPrice && (
                   <Price
                     price={g.originalPrice / 100}
-                    className="tw-mt-2"
+                    className="tw-mt-2 tw-ml-4"
                     line
                   />
                 )}

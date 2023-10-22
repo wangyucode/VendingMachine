@@ -1,6 +1,6 @@
 {
   "name": "vending",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "dependencies": {
     "@nutui/nutui-react": "^2.0.17",
@@ -24,12 +24,10 @@
   },
   "browserslist": {
     "production": [
-      "chrome 44"
+      "chrome 55"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "chrome 55"
     ]
   }
 }
