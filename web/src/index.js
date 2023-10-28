@@ -14,10 +14,20 @@ root.render(
   </React.StrictMode>
 );
 
-window.addEventListener("error", (e) => postLog(e.error.stack, "ERROR"), true);
+window.addEventListener(
+  "error",
+  (e) => {
+    console.error('onerror->', e);
+    if(e.error) postLog(JSON.stringify(e.error), "ERROR");
+  },
+  true
+);
 window.addEventListener(
   "unhandledrejection",
-  (e) => postLog(e.reason.stack, "ERROR"),
+  (e) => {
+    console.error('unhandledrejection->', e);
+    if(e.reason) postLog(JSON.stringify(e.reason), "ERROR");
+  },
   true
 );
 

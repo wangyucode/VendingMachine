@@ -3,6 +3,7 @@ import { crc16 } from "./crc16";
 export function sendMsg(req, callback) {
   setTimeout(async () => {
     try {
+      console.log("Sending", req);
       callback(await window.Android.fromJs(req));
     } catch {
       callback("not in shell");

@@ -23,6 +23,7 @@ import Buy from "./Buy";
 import Send from "./Send";
 import { getCartGoodsCount } from "./utils";
 import Code from "./Code";
+import { sendMsg } from "./android";
 
 let currentGoods = null;
 let iterationTimeoutId = 0;
@@ -48,7 +49,7 @@ function App() {
     fetchBanner();
     fetchGoods();
     if (!heartbeatIntervalId)
-      heartbeatIntervalId = setInterval(heartbeat, 5 * 60 * 1000);
+      heartbeatIntervalId = setInterval(heartbeat, 60 * 1000);
   }, []);
 
   async function heartbeat() {
@@ -60,8 +61,12 @@ function App() {
     );
     const data = await res.json();
     if (data && data.success) {
-      if (data.payload.value.updateGoods) fetchGoods();
-      if (data.payload.value.updateBanner) fetchBanner();
+      if (data.payload.updateGoods) fetchGoods();
+      if (data.payload.updateBanner) fetchBanner();
+      if (data.payload.updateWeb) {
+        const msg = JSON.stringify({ type: 3 });
+        sendMsg(msg, console.log);
+      }
     }
   }
 
@@ -87,7 +92,7 @@ function App() {
     );
     const data = await res.json();
     if (data && data.success) {
-      setGoods(data.payload);
+      setGoods(data.payload.filter((g) => g.stock > 0));
     }
   }
 
@@ -310,7 +315,9 @@ function App() {
             <div>
               <Image src={g.mainImg} width="250" height="250" fit="cover" />
 
-              <p className="tw-text-xl tw-mt-2 tw-mx-2 tw-font-bold">{g.name}</p>
+              <p className="tw-text-xl tw-mt-2 tw-mx-2 tw-font-bold">
+                {g.name}
+              </p>
               <div className="tw-flex tw-items-center tw-gap-2  tw-m-2">
                 <div className="tw-bg-emerald-500 tw-mr-1 tw-text-2xl tw-px-2 tw-rounded tw-text-white tw-font-bold">
                   {g.track}
