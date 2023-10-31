@@ -55,7 +55,7 @@ export default function Detail({
           仅剩{goods.stock}件
         </div>
         <Divider />
-        <div className="tw-w-full tw-mb-2">更多图片：</div>
+        {goods.images.length ? <div className="tw-w-full tw-mb-2">更多图片：</div>: <></>}
         {goods.images.map((image, index) => (
           <Image src={image} width="100%" key={index} />
         ))}
