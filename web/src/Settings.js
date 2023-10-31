@@ -48,7 +48,7 @@ export default function Settings({ setDialogContent, countDown }) {
       data,
       (req, res) => (p.current.innerText += `\ns:${req}\nr:${res}`)
     );
-    await sleep(3000);
+    await sleep(4000);
     const queryData = "01 03 4f 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00";
     sendSerialMsg(
       queryData,

@@ -62,7 +62,7 @@ export default function Send({
       .padStart(2, "0");
     const data = `01 05 ${index} 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
     sendSerialMsg(data, (req, res) => postLog(`\ns:${req}\nr:${res}`));
-    await sleep(3000);
+    await sleep(4000);
     const queryData = `01 03 ${index} 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
     sendSerialMsg(queryData, (req, res) => postLog(`\ns:${req}\nr:${res}`));
     await sleep(100);
