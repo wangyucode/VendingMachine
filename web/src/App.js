@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Popup,
   Swiper,
@@ -37,6 +37,7 @@ export const orderStore = {
 };
 
 function App() {
+  const appRef = useRef(null);
   const [dialogContent, setDialogContent] = useState(null);
   const [banners, setBanners] = useState([]);
   const [goods, setGoods] = useState([]);
@@ -141,6 +142,7 @@ function App() {
           orderStore.orderId = null;
           setReturnCountDown(60);
           setDialogContent(null);
+          appRef.current.scrollTop = 0;
         } else if (count < 11) {
           setReturnCountDown(count);
         }
@@ -263,7 +265,11 @@ function App() {
   }
 
   return (
-    <div className="app tw-pt-4" onTouchStart={onInteraction}>
+    <div
+      className="app tw-pt-4 tw-overflow-y-scroll"
+      onTouchStart={onInteraction}
+      ref={appRef}
+    >
       <Row gutter="16" className="tw-px-4">
         <Col span="18">
           <Swiper

@@ -58,7 +58,8 @@ body,
   border-top-right-radius: 8px;
 }
 
-.login .nut-overlay, .code .nut-overlay {
+.login .nut-overlay,
+.code .nut-overlay {
   display: none;
 }
 
@@ -106,33 +107,44 @@ body,
 }
 
 .app .nut-badge__sup {
-  top: 4px !important;
-  right: 16px !important;
-  font-size: 20px;
-  line-height: 24px;
+  top: 16px !important;
+  right: 32px !important;
+  width: 32px;
+  border-radius: 50%;
+  height: 32px;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 32px;
 }
 
 .app .cart-float {
-  width: 50px;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
 }
 
-.cart .nut-image{
+.cart-float .nut-icon {
+  width: 36px !important;
+  height: 36px;
+}
+
+.cart .nut-image {
   display: inline-block;
 }
 
-.nut-toast__overlay-default{
+.nut-toast__overlay-default {
   z-index: 3000 !important;
 }
 
-.tw-bg-emerald-500{
+.tw-bg-emerald-500 {
   background-color: #10b981;
 }
 
-.tw-text-white{
+.tw-text-white {
   color: #fff;
 }
 
-.tw-bg-white{
+.tw-bg-white {
   background-color: #fff;
 }
 
@@ -140,6 +152,6 @@ body,
   background-color: #f1f5f9;
 }
 
-.tw-border-slate-300{
+.tw-border-slate-300 {
   border-color: #cbd5e1;
 }

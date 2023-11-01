@@ -99,6 +99,7 @@ export default function Send({
           >{`${current}/${total}`}</div>
         </CircleProgress>
         <div className="tw-mt-4">{logs}</div>
+        <div className="tw-mt-4">如需购物袋，柜子左边有</div>
       </div>
     </div>
   );
