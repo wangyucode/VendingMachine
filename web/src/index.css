@@ -117,6 +117,17 @@ body,
   line-height: 32px;
 }
 
+.detail .nut-badge__sup {
+  top: 8px !important;
+  right: 16px !important;
+  width: 24px;
+  border-radius: 50%;
+  height: 24px;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+}
+
 .app .cart-float {
   width: 96px;
   height: 96px;

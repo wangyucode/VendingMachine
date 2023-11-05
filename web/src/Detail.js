@@ -1,4 +1,11 @@
-import { Divider, Image, Price, Button, Badge,Toast } from "@nutui/nutui-react";
+import {
+  Divider,
+  Image,
+  Price,
+  Button,
+  Badge,
+  Toast,
+} from "@nutui/nutui-react";
 import { Cart } from "@nutui/icons-react";
 
 import { getCartGoodsCount } from "./utils";
@@ -28,6 +35,8 @@ export default function Detail({
     setCartGoods([...cartGoods]);
   }
 
+  const count = getCartGoodsCount(cartGoods);
+
   return (
     <div className="detail tw-flex tw-flex-col tw-w-full tw-h-full tw-text-2xl tw-bg-slate-100 tw-overflow-hidden">
       <div className="tw-bg-white tw-p-4 tw-border-b tw-border-slate-300 tw-shadow">
@@ -55,24 +64,40 @@ export default function Detail({
           仅剩{goods.stock}件
         </div>
         <Divider />
-        {goods.images.length ? <div className="tw-w-full tw-mb-2">更多图片：</div>: <></>}
+        {goods.images.length ? (
+          <div className="tw-w-full tw-mb-2">更多图片：</div>
+        ) : (
+          <></>
+        )}
         {goods.images.map((image, index) => (
           <Image src={image} width="100%" key={index} />
         ))}
       </div>
 
       <div className="tw-w-full tw-bg-white tw-p-4 tw-flex tw-border-t tw-border-slate-300 tw-shadow tw-justify-between">
-        <Badge value={getCartGoodsCount(cartGoods)}>
+        {count ? (
+          <Badge value={getCartGoodsCount(cartGoods)}>
+            <Button
+              size="large"
+              className="cart"
+              icon={<Cart width={18} />}
+              onClick={toCart}
+            >
+              购物车
+            </Button>
+          </Badge>
+        ) : (
           <Button
             size="large"
             className="cart"
             icon={<Cart width={18} />}
             onClick={toCart}
-            disabled={cartGoods.length === 0}
+            disabled
           >
             购物车
           </Button>
-        </Badge>
+        )}
+
         <Button type="warning" size="large" onClick={addToCart}>
           加入购物车
         </Button>
