@@ -21,7 +21,7 @@ import Detail from "./Detail";
 import GoodsCart from "./GoodsCart";
 import Buy from "./Buy";
 import Send from "./Send";
-import { getCartGoodsCount } from "./utils";
+import { getCartGoodsCount, postLog } from "./utils";
 import Code from "./Code";
 import { sendMsg } from "./android";
 
@@ -35,6 +35,7 @@ export const orderStore = {
   checkIntervalId: 0,
   orderId: null,
 };
+let interacting = false;
 
 function App() {
   const appRef = useRef(null);
@@ -251,6 +252,13 @@ function App() {
         }
         count--;
       }, 1000);
+    }
+    if(!interacting) {
+      interacting = true;
+      postLog("Interacting", "ERROR");
+      setTimeout(() => {
+        interacting = false;
+      }, 10*60*1000);
     }
   }
 
