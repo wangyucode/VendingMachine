@@ -7,8 +7,7 @@ import "@nutui/nutui-react/dist/style.css";
 import { sendMsg } from "./android";
 import { postLog } from "./utils";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
@@ -17,16 +16,16 @@ root.render(
 window.addEventListener(
   "error",
   (e) => {
-    console.error('onerror->', e);
-    if(e.error) postLog(JSON.stringify(e.error), "ERROR");
+    console.error("onerror->", e);
+    if (e.error) postLog(JSON.stringify(e.error), "ERROR");
   },
   true
 );
 window.addEventListener(
   "unhandledrejection",
   (e) => {
-    console.error('unhandledrejection->', e);
-    if(e.reason) postLog(JSON.stringify(e.reason), "ERROR");
+    console.error("unhandledrejection->", e);
+    if (e.reason) postLog(JSON.stringify(e.reason), "ERROR");
   },
   true
 );

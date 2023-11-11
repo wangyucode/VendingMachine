@@ -12,7 +12,6 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -20,15 +19,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.File
 import java.util.Date
-import java.util.zip.ZipInputStream
-
-const val TAG = "MainActivity"
 
 class MainActivity : Activity() {
 
@@ -40,10 +32,6 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        scope.launch {
-            val htmlPath = checkWebProject()
-            loadWebPage(htmlPath)
-        }
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
@@ -84,6 +72,8 @@ class MainActivity : Activity() {
             requestIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(requestIntent)
         }
+
+        loadWebPage()
     }
 
 
@@ -97,7 +87,7 @@ class MainActivity : Activity() {
                 java.lang.Boolean.TYPE
             )
             setWifiApEnabled.invoke(wifiManager, mWifiConfiguration, false)
-            delay(2000)
+            delay(5000)
             setWifiApEnabled.invoke(wifiManager, mWifiConfiguration, true)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -137,61 +127,20 @@ class MainActivity : Activity() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun loadWebPage(htmlPath: String) {
+    private fun loadWebPage() {
         webView = findViewById(R.id.web_view) as WebView
         webView.setWebViewClient(WebViewClient())
         webView.settings.javaScriptEnabled = true
-        webView.settings.allowFileAccess = true
-        WebView.setWebContentsDebuggingEnabled(true)
+        //WebView.setWebContentsDebuggingEnabled(true)
         webView.addJavascriptInterface(MessageHandler(webView), "Android")
 
-        webView.loadUrl(htmlPath)
-    }
-
-    private suspend fun checkWebProject(): String {
-        val path = cacheDir.absolutePath
-        Log.d(TAG, "path->: $path")
-        val htmlPath = "$path/vending/index.html"
-        val file = File(htmlPath)
-        withContext(Dispatchers.IO) {
-            if (!file.exists()) {
-                downloadWebPackage()
-            }
-        }
-        return "file://$htmlPath"
-    }
-
-    private fun downloadWebPackage() {
-        val path = cacheDir.absolutePath
-        val client = OkHttpClient()
-        val request = Request.Builder().url("https://wycode.cn/upload/vending/build.zip").build()
-        val response = client.newCall(request).execute()
-        if (response.code == 200) {
-            val zipFile = File("$path/vending/web.zip")
-            zipFile.parentFile?.mkdirs()
-            response.body?.byteStream()?.copyTo(zipFile.outputStream())
-
-            val zipInputStream = ZipInputStream(zipFile.inputStream())
-            var entry = zipInputStream.nextEntry
-            while (entry != null) {
-                val file = File(path + "/vending/" + entry.name)
-                if (entry.isDirectory) {
-                    file.mkdir()
-                } else {
-                    file.parentFile?.mkdirs()
-                    zipInputStream.copyTo(file.outputStream())
-                }
-                entry = zipInputStream.nextEntry
-            }
-        }
+        webView.loadUrl("https://wycode.cn/upload/vending/vite/")
     }
 
     fun upgrade() {
-        runBlocking {
-            withContext(Dispatchers.IO) {
-                downloadWebPackage()
-            }
+        scope.launch {
             withContext(Dispatchers.Main) {
+                webView.clearCache(true)
                 webView.reload()
             }
         }

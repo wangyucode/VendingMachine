@@ -56,9 +56,9 @@ function App() {
 
   async function heartbeat() {
     const res = await fetch(
-      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/heartbeat`,
+      `${import.meta.env.VITE_APP_HOST_NAME}/api/v1/vending/heartbeat`,
       {
-        headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+        headers: { "X-API-Key": import.meta.env.VITE_APP_API_KEY },
       }
     );
     const data = await res.json();
@@ -74,9 +74,9 @@ function App() {
 
   async function fetchBanner() {
     const res = await fetch(
-      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/banner`,
+      `${import.meta.env.VITE_APP_HOST_NAME}/api/v1/vending/banner`,
       {
-        headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+        headers: { "X-API-Key": import.meta.env.VITE_APP_API_KEY },
       }
     );
     const data = await res.json();
@@ -87,9 +87,9 @@ function App() {
 
   async function fetchGoods() {
     const res = await fetch(
-      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/goods`,
+      `${import.meta.env.VITE_APP_HOST_NAME}/api/v1/vending/goods`,
       {
-        headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+        headers: { "X-API-Key": import.meta.env.VITE_APP_API_KEY },
       }
     );
     const data = await res.json();

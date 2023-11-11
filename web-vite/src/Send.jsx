@@ -67,9 +67,9 @@ export default function Send({
     sendSerialMsg(queryData, (req, res) => postLog(`\ns:${req}\nr:${res}`));
     await sleep(100);
     await fetch(
-      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/reduce?track=${track}`,
+      `${import.meta.env.VITE_APP_HOST_NAME}/api/v1/vending/reduce?track=${track}`,
       {
-        headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+        headers: { "X-API-Key": import.meta.env.VITE_APP_API_KEY },
       }
     );
   }

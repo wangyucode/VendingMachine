@@ -14,8 +14,8 @@ export default function Code({
     if (!code) return;
     setDisabled(true);
     const res = await fetch(
-      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/code?code=${code}`,
-      { headers: { "X-API-Key": process.env.REACT_APP_API_KEY } }
+      `${import.meta.env.VITE_APP_HOST_NAME}/api/v1/vending/code?code=${code}`,
+      { headers: { "X-API-Key": import.meta.env.VITE_APP_API_KEY } }
     );
     const data = await res.json();
     console.log(data);

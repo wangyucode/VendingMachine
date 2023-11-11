@@ -11,7 +11,7 @@ export function getTotalPrice(cartGoods) {
 }
 
 export function postLog(message, type) {
-  fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/log`, {
+  fetch(`${import.meta.env.VITE_APP_HOST_NAME}/api/v1/log`, {
     method: "POST",
     body: JSON.stringify({ message, type }),
   });

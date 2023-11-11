@@ -30,9 +30,7 @@ class MessageHandler(
             MSG_TYPE_SERIAL_SEND -> serialPortManager.send(jsMessage.body)
             MSG_TYPE_UPGRADE ->  {
                 val activity = webView.context as MainActivity
-                runBlocking {
-                    activity.upgrade()
-                }
+                activity.upgrade()
                 "ok"
             }
             MSG_TYPE_EXIT -> {

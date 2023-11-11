@@ -36,9 +36,9 @@ export default function Buy({
         track: cg.goods.track,
       }));
       const params = { goodsDetail, total, description };
-      fetch(`${process.env.REACT_APP_HOST_NAME}/api/v1/vending/order`, {
+      fetch(`${import.meta.env.VITE_APP_HOST_NAME}/api/v1/vending/order`, {
         headers: {
-          "X-API-Key": process.env.REACT_APP_API_KEY,
+          "X-API-Key": import.meta.env.VITE_APP_API_KEY,
           "Content-Type": "application/json",
         },
         method: "POST",
@@ -64,8 +64,8 @@ export default function Buy({
       return;
     }
     const res = await fetch(
-      `${process.env.REACT_APP_HOST_NAME}/api/v1/vending/order?id=${orderStore.orderId}`,
-      { headers: { "X-API-Key": process.env.REACT_APP_API_KEY } }
+      `${import.meta.env.VITE_APP_HOST_NAME}/api/v1/vending/order?id=${orderStore.orderId}`,
+      { headers: { "X-API-Key": import.meta.env.VITE_APP_API_KEY } }
     );
     const data = await res.json();
     console.log(data);

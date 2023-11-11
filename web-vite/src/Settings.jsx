@@ -8,7 +8,7 @@ import {
 } from "@nutui/nutui-react";
 
 import { sendMsg, sendSerialMsg, sleep } from "./android";
-const packageJson = require("../package.json");
+import {version} from "../package.json";
 
 let stopMultiple = false;
 
@@ -183,7 +183,7 @@ export default function Settings({ setDialogContent, countDown }) {
         退出
       </Button>
       <div className="tw-text-sm tw-fixed tw-right-4 tw-bottom-4">
-        {packageJson.version}
+        {version}
       </div>
     </div>
   );
