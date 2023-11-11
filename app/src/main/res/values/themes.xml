@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.VendingMachine" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.VendingMachine" parent="android:Theme.Light.NoTitleBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
     </style>
 </resources>

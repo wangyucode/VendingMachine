@@ -1,34 +1,42 @@
 package cn.wycode.vendingmachine
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.net.wifi.WifiConfiguration
+import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.SystemClock
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
+import java.util.Date
 import java.util.zip.ZipInputStream
 
 const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
 
     private val scope = MainScope()
     private lateinit var webView: WebView
     private lateinit var alarmManager: AlarmManager
+    private lateinit var wifiManager: WifiManager
 
-    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,6 +64,51 @@ class MainActivity : AppCompatActivity() {
         }
 
         alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        wifiManager = this.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+
+        val intent = this.packageManager.getLaunchIntentForPackage(this.packageName)
+        intent?.putExtra("isEnableAp", true)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 200, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val now = Date()
+        now.hours = 23
+        now.minutes = 50
+        alarmManager.set(AlarmManager.RTC, now.time, pendingIntent)
+
+        if (!Settings.System.canWrite(this)) {
+            val requestIntent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+            requestIntent.data = Uri.parse("package:" + this.packageName)
+            requestIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(requestIntent)
+        }
+    }
+
+
+    private suspend fun enableWifiAp() {
+        try {
+            val methodWifiApConfiguration =
+                wifiManager.javaClass.getMethod("getWifiApConfiguration")
+            val mWifiConfiguration = methodWifiApConfiguration.invoke(wifiManager)
+            val setWifiApEnabled = wifiManager.javaClass.getMethod(
+                "setWifiApEnabled", WifiConfiguration::class.java,
+                java.lang.Boolean.TYPE
+            )
+            setWifiApEnabled.invoke(wifiManager, mWifiConfiguration, false)
+            delay(2000)
+            setWifiApEnabled.invoke(wifiManager, mWifiConfiguration, true)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent?.getBooleanExtra("isEnableAp", false) == true) {
+            scope.launch { enableWifiAp() }
+        }
     }
 
     override fun onStart() {
@@ -68,7 +121,6 @@ class MainActivity : AppCompatActivity() {
         if (pendingIntent != null) alarmManager.cancel(pendingIntent)
     }
 
-
     override fun onStop() {
         super.onStop()
         val intent = this.packageManager.getLaunchIntentForPackage(this.packageName)
@@ -76,13 +128,18 @@ class MainActivity : AppCompatActivity() {
             this, 100, intent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, 60000, pendingIntent)
+
+        alarmManager.set(
+            AlarmManager.ELAPSED_REALTIME,
+            SystemClock.elapsedRealtime() + 30000,
+            pendingIntent
+        )
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun loadWebPage(htmlPath: String) {
-        webView = findViewById(R.id.web_view)
-        webView.webViewClient = WebViewClient()
+        webView = findViewById(R.id.web_view) as WebView
+        webView.setWebViewClient(WebViewClient())
         webView.settings.javaScriptEnabled = true
         webView.settings.allowFileAccess = true
         WebView.setWebContentsDebuggingEnabled(true)
