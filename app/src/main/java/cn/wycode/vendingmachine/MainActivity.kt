@@ -54,18 +54,6 @@ class MainActivity : Activity() {
         alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         wifiManager = this.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
-
-        val intent = this.packageManager.getLaunchIntentForPackage(this.packageName)
-        intent?.putExtra("isEnableAp", true)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 200, intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val now = Date()
-        now.hours = 23
-        now.minutes = 50
-        alarmManager.set(AlarmManager.RTC, now.time, pendingIntent)
-
         if (!Settings.System.canWrite(this)) {
             val requestIntent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
             requestIntent.data = Uri.parse("package:" + this.packageName)
@@ -74,6 +62,19 @@ class MainActivity : Activity() {
         }
 
         loadWebPage()
+
+        setupRestartWifiAp()
+    }
+
+    private fun setupRestartWifiAp(){
+        val intent = this.packageManager.getLaunchIntentForPackage(this.packageName)
+        intent?.putExtra("isEnableAp", true)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 200, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val now = Date()
+        alarmManager.set(AlarmManager.RTC, now.time + 8 * 3600 * 1000, pendingIntent)
     }
 
 
@@ -89,6 +90,7 @@ class MainActivity : Activity() {
             setWifiApEnabled.invoke(wifiManager, mWifiConfiguration, false)
             delay(5000)
             setWifiApEnabled.invoke(wifiManager, mWifiConfiguration, true)
+            setupRestartWifiAp()
         } catch (e: Exception) {
             e.printStackTrace()
         }
