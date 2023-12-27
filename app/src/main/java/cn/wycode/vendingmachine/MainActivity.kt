@@ -74,7 +74,7 @@ class MainActivity : Activity() {
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
         val now = Date()
-        alarmManager.set(AlarmManager.RTC, now.time + 8 * 3600 * 1000, pendingIntent)
+        alarmManager.set(AlarmManager.RTC, now.time + 4 * 3600 * 1000, pendingIntent)
     }
 
 

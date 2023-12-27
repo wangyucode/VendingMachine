@@ -12,6 +12,9 @@ export function getTotalPrice(cartGoods) {
 
 export function postLog(message, type) {
   fetch(`${import.meta.env.VITE_APP_HOST_NAME}/api/v1/log`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
     method: "POST",
     body: JSON.stringify({ message, type }),
   });
