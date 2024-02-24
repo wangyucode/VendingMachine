@@ -116,6 +116,7 @@ class MainActivity : Activity() {
     override fun onStop() {
         super.onStop()
         val intent = this.packageManager.getLaunchIntentForPackage(this.packageName)
+        intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
         val pendingIntent = PendingIntent.getActivity(
             this, 100, intent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
